@@ -1,0 +1,9 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "WNBA Standings",
+    "section": "",
+    "text": "2024202320222021202020192018\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAbout this site\nThis project was inspired by Greg Stoll’s MLB Division Race Charts.\nAll statistics are from the amazing Basketball Reference.\nWNBA team colors were identified by Team Color Codes.\nEach plot shows how many games above or below .500 every team was throughout the course of the season. As of 2022, the top 8 teams make the playoffs, hence the gap in the legend, but be warned that I didn’t actually code up the tie-breaker scenarios, so ties are broken arbitrarily on this page."
+  }
+]
