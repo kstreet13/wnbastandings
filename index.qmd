@@ -10,7 +10,7 @@ lightbox: true
 
 ```{r}
 #| include: false
-
+require(scales)
 getSchedule <- function(year){
     require(rvest)
     sched <- html_table(read_html(paste0('https://www.basketball-reference.com/wnba/years/',year,'_games.html')))[[1]]
