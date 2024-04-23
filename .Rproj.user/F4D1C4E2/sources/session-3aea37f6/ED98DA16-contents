@@ -1,0 +1,228 @@
+---
+title: "WNBA Standings"
+format: 
+  html:
+    fig-width: 10
+    fig-height: 6
+    toc: false
+---
+
+```{r}
+#| include: false
+
+getSchedule <- function(year){
+    require(rvest)
+    sched <- html_table(read_html(paste0('https://www.basketball-reference.com/wnba/years/',year,'_games.html')))[[1]]
+    return(sched)
+}
+getStandings <- function(year){
+    standings <- html_table(read_html(paste0('https://www.basketball-reference.com/wnba/years/',year,'_standings.html')))[[1]]
+    return(standings)
+}
+
+makeWNBAstandingsGraph <- function(year, sched, standings){
+    # team colors from: https://teamcolorcodes.com/wnba-color-codes/
+# can go back as far as 2018 with these teams
+teamdata <- read.csv(text = 'team,name,color1,color2
+ATL,Atlanta Dream,#C8102E,#418FDE
+CHI,Chicago Sky,#418FDE,#FFCD00
+CON,Connecticut Sun,#A6192E,#041E42
+DAL,Dallas Wings,#0C2340,#C4D600
+IND,Indiana Fever,#041E42,#C8102E
+LV,Las Vegas Aces,#000000,#BA0C2F
+LA,Los Angeles Sparks,#702F8A,#FFC72C
+MIN,Minnesota Lynx,#0C2340,#236192
+NY,New York Liberty,#6ECEB2,#000000
+PHX,Phoenix Mercury,#201747,#CB6015
+SEA,Seattle Storm,#2C5234,#FBE122
+WSH,Washington Mystics,#0C2340,#C8102E')
+
+sched <- sched[,1:5]
+# date could be in two formats, with or without commas
+if(length(grep(',', sched$Date)) > 0){
+    sched$Date <- as.Date(sched$Date, format = "%a, %b %d, %Y")
+}else{
+    sched$Date <- as.Date(sched$Date, format = "%a %b %d %Y")
+}
+names(sched) <- c('Date','Visitor','PTSvis','Home','PTShome')
+# remove playoffs
+if(any(sched$Visitor == 'Playoffs')){
+    sched <- sched[1:(which.max(sched$Visitor == 'Playoffs')-1), ]
+}
+sched$PTSvis <- as.numeric(sched$PTSvis)
+sched$PTShome <- as.numeric(sched$PTShome)
+teams <- unique(c(sched$Visitor, sched$Home))
+# check
+stopifnot(all(teams %in% teamdata$name))
+stopifnot(all(teamdata$name %in% teams))
+
+
+# QC stuff. missing values, ties
+if(any(!is.na(sched$PTShome) & (sched$PTShome==sched$PTSvis))){
+    stop('ties detected')
+}
+
+curves <- lapply(teams, function(team){
+    away <- sched[which(sched$Visitor == team), ]
+    away$WL <- away$PTSvis > away$PTShome
+    home <- sched[which(sched$Home == team), ]
+    home$WL <- home$PTShome > home$PTSvis
+    curve <- rbind(away, home)
+    curve <- curve[order(curve$Date), ]
+    curve$margin <- cumsum(c(-1,1)[factor(curve$WL)])
+    
+    curve <- curve[, c('Date','margin')]
+    supp <- data.frame(Date = curve$Date-1,
+                       margin = c(0,curve$margin[-nrow(curve)]))
+    supp <- supp[!supp$Date %in% curve$Date, ]
+    curve <- rbind(supp,curve)
+    curve <- curve[order(curve$Date), ]
+    
+    return(curve[!is.na(curve$margin), ]) # only count played games
+})
+names(curves) <- teams
+# make sure curves start the day before opening day and don't end before the current date
+opening <- min(do.call(rbind, curves)$Date)
+today <- max(do.call(rbind, curves)$Date)
+for(i in seq_along(curves)){
+    curve <- curves[[i]]
+    if(! opening %in% curve$Date){
+        curve <- rbind(c(opening, 0), curve)
+    }
+    if(! today %in% curve$Date){
+        curve <- rbind(curve, c(today, curve$margin[nrow(curve)]))
+    }
+    curves[[i]] <- curve
+}
+curves <- curves[order(sapply(curves, function(x){ x$margin[nrow(x)] }))]
+teamdata <- teamdata[match(names(curves), teamdata$name), ]
+teamdata$margin <- sapply(curves, function(x){ x$margin[nrow(x)] })
+# all(names(curves) == teamdata$name) # check
+
+
+# check against actual standings
+standings$Team <- gsub('[*]','', standings$Team)
+for(team in teams){
+    s.i <- which(standings$Team == team)
+    c.i <- which(names(curves) == team)
+    stopifnot(curves[[c.i]]$margin[nrow(curves[[c.i]])] == standings$W[s.i] - standings$L[s.i])
+}
+
+# build legend df with blank row to separate non/playoff teams
+lgnd <- teamdata[nrow(teamdata):1, ]
+lgnd <- merge(lgnd, standings, by.x = 'name', by.y = 'Team')
+lgnd <- lgnd[match(names(curves), lgnd$name), ]
+lgnd <- lgnd[nrow(lgnd):1, ]
+lgnd$nameRecord <- paste0(lgnd$name,' (',lgnd$W,'-',lgnd$L,')')
+lgnd <- rbind(lgnd[1:8,], NA, lgnd[9:nrow(lgnd), ])
+
+
+layout(matrix(c(1,1,1,2), nrow=1))
+par(mar = c(5,4,4,0)+.1)
+
+plot(range(do.call(rbind, curves)$Date), range(sapply(curves,function(x){x$margin})), col = 'transparent',
+     xlab = '', ylab='', main = paste(year, 'WNBA Standings'), las = 1)
+rect(min(sched$Date)-9999,-9999,max(sched$Date)+9999,9999, col='grey95')
+abline(h = 0)
+abline(h = seq(-100,-5, by=5), lty=2, col = rgb(0,0,0,.3))
+abline(h = seq(5,100, by=5), lty=2, col = rgb(0,0,0,.3))
+for(i in 1:length(curves)){
+    cc <- as.character(teamdata[teamdata$name == names(curves)[i], ][,c('color1','color2')])
+    #points(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], pch=16, cex=.5)
+    lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], lwd=4)
+    lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[1], lwd=3)
+    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$margin[nrow(curves[[i]])], col=cc[2], pch=16, cex=2)
+    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$margin[nrow(curves[[i]])], col=cc[1], pch=16, cex = 1.5)
+}
+
+par(mar = c(5,0,4,2)+.1)
+plot.new()
+legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=3, col = lgnd$color2, cex = 1.25)
+legend('left', legend = lgnd$nameRecord, 
+       bty='n', lwd=2, col = lgnd$color1, cex = 1.25)
+}
+
+```
+
+::: {.panel-tabset}
+
+## 2024
+```{r}
+#| echo: false
+#| message: false
+#year <- 2024
+#sched <- getSchedule(year)
+#standings <- getStandings(year)
+#makeWNBAstandingsGraph(year, sched, standings)
+```
+
+## 2023
+```{r}
+#| echo: false
+#| message: false
+year <- 2023
+sched <- readRDS(paste0('data/sched',year,'.rds'))
+standings <- readRDS(paste0('data/standings',year,'.rds'))
+makeWNBAstandingsGraph(year, sched, standings)
+```
+
+## 2022
+```{r}
+#| echo: false
+#| message: false
+year <- 2022
+sched <- readRDS(paste0('data/sched',year,'.rds'))
+standings <- readRDS(paste0('data/standings',year,'.rds'))
+makeWNBAstandingsGraph(year, sched, standings)
+```
+
+## 2021
+```{r}
+#| echo: false
+#| message: false
+year <- 2021
+sched <- readRDS(paste0('data/sched',year,'.rds'))
+standings <- readRDS(paste0('data/standings',year,'.rds'))
+makeWNBAstandingsGraph(year, sched, standings)
+```
+
+## 2020
+```{r}
+#| echo: false
+#| message: false
+year <- 2020
+sched <- readRDS(paste0('data/sched',year,'.rds'))
+standings <- readRDS(paste0('data/standings',year,'.rds'))
+makeWNBAstandingsGraph(year, sched, standings)
+```
+
+## 2019
+```{r}
+#| echo: false
+#| message: false
+year <- 2019
+sched <- readRDS(paste0('data/sched',year,'.rds'))
+standings <- readRDS(paste0('data/standings',year,'.rds'))
+makeWNBAstandingsGraph(year, sched, standings)
+```
+
+## 2018
+```{r}
+#| echo: false
+#| message: false
+year <- 2018
+sched <- readRDS(paste0('data/sched',year,'.rds'))
+standings <- readRDS(paste0('data/standings',year,'.rds'))
+makeWNBAstandingsGraph(year, sched, standings)
+```
+
+:::
+
+### About this site
+This project was inspired by Greg Stoll's [MLB Division Race Charts](https://gregstoll.com/baseballdivisionraces/).
+
+All statistics are from the amazing [Basketball Reference](https://www.basketball-reference.com/wnba/).
+
+WNBA team colors were identified by [Team Color Codes](https://teamcolorcodes.com/wnba-color-codes/).
+
+Each plot shows how many games above or below .500 every team was throughout the course of the season. As of 2022, the top 8 teams make the playoffs, hence the gap in the legend, but be warned that I didn't actually code up the tie-breaker scenarios, so ties are broken arbitrarily on this page.
