@@ -10,7 +10,6 @@ lightbox: true
 
 ```{r}
 #| include: false
-require(scales)
 getSchedule <- function(year){
     require(rvest)
     sched <- html_table(read_html(paste0('https://www.basketball-reference.com/wnba/years/',year,'_games.html')))[[1]]
@@ -125,6 +124,7 @@ if(mode == 'dark'){
     par(fg = 'white', bg = '#222222', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
 }
 
+require(scales)
 plot(range(do.call(rbind, curves)$Date), range(sapply(curves,function(x){x$margin})), col = 'transparent',
      xlab = 'Date', ylab='Games Over/Under .500', main = paste(year, 'WNBA Standings'), las = 1)
 #rect(min(sched$Date)-9999,-9999,max(sched$Date)+9999,9999, col='grey95')
