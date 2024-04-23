@@ -5,6 +5,7 @@ format:
     fig-width: 10
     fig-height: 6
     toc: false
+lightbox: true
 ---
 
 ```{r}
@@ -20,7 +21,8 @@ getStandings <- function(year){
     return(standings)
 }
 
-makeWNBAstandingsGraph <- function(year, sched, standings){
+makeWNBAstandingsGraph <- function(year, sched, standings, mode = c('light','dark')){
+    mode <- match.arg(mode)
     # team colors from: https://teamcolorcodes.com/wnba-color-codes/
 # can go back as far as 2018 with these teams
 teamdata <- read.csv(text = 'team,name,color1,color2
@@ -118,28 +120,31 @@ lgnd <- rbind(lgnd[1:8,], NA, lgnd[9:nrow(lgnd), ])
 
 
 layout(matrix(c(1,1,1,2), nrow=1))
-par(mar = c(5,4,4,0)+.1)
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2)
+if(mode == 'dark'){
+    par(fg = 'white', bg = '#222222', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
+}
 
 plot(range(do.call(rbind, curves)$Date), range(sapply(curves,function(x){x$margin})), col = 'transparent',
-     xlab = '', ylab='', main = paste(year, 'WNBA Standings'), las = 1)
-rect(min(sched$Date)-9999,-9999,max(sched$Date)+9999,9999, col='grey95')
+     xlab = 'Date', ylab='Games Over/Under .500', main = paste(year, 'WNBA Standings'), las = 1)
+#rect(min(sched$Date)-9999,-9999,max(sched$Date)+9999,9999, col='grey95')
 abline(h = 0)
-abline(h = seq(-100,-5, by=5), lty=2, col = rgb(0,0,0,.3))
-abline(h = seq(5,100, by=5), lty=2, col = rgb(0,0,0,.3))
+abline(h = seq(-100,-5, by=5), lty=2, col = alpha(par()$fg,.3))
+abline(h = seq(5,100, by=5), lty=2, col = alpha(par()$fg,.3))
 for(i in 1:length(curves)){
     cc <- as.character(teamdata[teamdata$name == names(curves)[i], ][,c('color1','color2')])
     #points(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], pch=16, cex=.5)
-    lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], lwd=4)
+    lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], lwd=4.5)
     lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[1], lwd=3)
     points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$margin[nrow(curves[[i]])], col=cc[2], pch=16, cex=2)
     points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$margin[nrow(curves[[i]])], col=cc[1], pch=16, cex = 1.5)
 }
 
-par(mar = c(5,0,4,2)+.1)
+par(mar = c(5,0,4,1)+.1)
 plot.new()
-legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=3, col = lgnd$color2, cex = 1.25)
+legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, col = lgnd$color2, cex = 1.3)
 legend('left', legend = lgnd$nameRecord, 
-       bty='n', lwd=2, col = lgnd$color1, cex = 1.25)
+       bty='n', lwd=3, col = lgnd$color1, cex = 1.3)
 }
 
 ```
@@ -147,6 +152,12 @@ legend('left', legend = lgnd$nameRecord,
 ::: {.panel-tabset}
 
 ## 2024
+
+```{r}
+#| echo: false
+cat("Check back soon for 2024 standings, updated daily! Opening day is May 14th.")
+```
+
 ```{r}
 #| echo: false
 #| message: false
@@ -163,7 +174,20 @@ legend('left', legend = lgnd$nameRecord,
 year <- 2023
 sched <- readRDS(paste0('data/sched',year,'.rds'))
 standings <- readRDS(paste0('data/standings',year,'.rds'))
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
 makeWNBAstandingsGraph(year, sched, standings)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
 ```
 
 ## 2022
@@ -173,7 +197,20 @@ makeWNBAstandingsGraph(year, sched, standings)
 year <- 2022
 sched <- readRDS(paste0('data/sched',year,'.rds'))
 standings <- readRDS(paste0('data/standings',year,'.rds'))
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
 makeWNBAstandingsGraph(year, sched, standings)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
 ```
 
 ## 2021
@@ -183,7 +220,20 @@ makeWNBAstandingsGraph(year, sched, standings)
 year <- 2021
 sched <- readRDS(paste0('data/sched',year,'.rds'))
 standings <- readRDS(paste0('data/standings',year,'.rds'))
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
 makeWNBAstandingsGraph(year, sched, standings)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
 ```
 
 ## 2020
@@ -193,7 +243,20 @@ makeWNBAstandingsGraph(year, sched, standings)
 year <- 2020
 sched <- readRDS(paste0('data/sched',year,'.rds'))
 standings <- readRDS(paste0('data/standings',year,'.rds'))
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
 makeWNBAstandingsGraph(year, sched, standings)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
 ```
 
 ## 2019
@@ -203,7 +266,20 @@ makeWNBAstandingsGraph(year, sched, standings)
 year <- 2019
 sched <- readRDS(paste0('data/sched',year,'.rds'))
 standings <- readRDS(paste0('data/standings',year,'.rds'))
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
 makeWNBAstandingsGraph(year, sched, standings)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
 ```
 
 ## 2018
@@ -213,16 +289,32 @@ makeWNBAstandingsGraph(year, sched, standings)
 year <- 2018
 sched <- readRDS(paste0('data/sched',year,'.rds'))
 standings <- readRDS(paste0('data/standings',year,'.rds'))
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
 makeWNBAstandingsGraph(year, sched, standings)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
 ```
 
 :::
 
+
 ### About this site
+Each plot shows how many games above or below .500 every team was throughout the course of the season. As of 2022, the top 8 teams make the playoffs, hence the gap in the legend, but be warned that I didn't actually code up the tie-breaker scenarios, so ties are broken arbitrarily on this page.
+
 This project was inspired by Greg Stoll's [MLB Division Race Charts](https://gregstoll.com/baseballdivisionraces/).
 
 All statistics are from the amazing [Basketball Reference](https://www.basketball-reference.com/wnba/).
 
 WNBA team colors were identified by [Team Color Codes](https://teamcolorcodes.com/wnba-color-codes/).
 
-Each plot shows how many games above or below .500 every team was throughout the course of the season. As of 2022, the top 8 teams make the playoffs, hence the gap in the legend, but be warned that I didn't actually code up the tie-breaker scenarios, so ties are broken arbitrarily on this page.
+Special thanks to Lisa DeBruine for the [great demo](https://debruine.github.io/quarto_demo/dark_mode.html) on using light/dark modes in Quarto.

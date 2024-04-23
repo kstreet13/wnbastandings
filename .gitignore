@@ -46,6 +46,9 @@ vignettes/*.pdf
 # pkgdown site
 docs/
 
+# Quarto site
+_site/
+
 # translation temp files
 po/*~
 
