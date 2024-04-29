@@ -7,8 +7,8 @@ website:
 format:
   html:
     theme:
-      light: [flatly, light.scss]
       dark: [darkly, dark.scss]
+      light: [flatly, light.scss]
     css: styles.css
     toc: true
 

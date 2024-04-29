@@ -106,8 +106,9 @@ abline(h = seq(5,100, by=5), lty=2, col = rgb(0,0,0,.3))
 for(i in 1:length(curves)){
     cc <- as.character(teamdata[teamdata$name == names(curves)[i], ][,c('color1','color2')])
     #points(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], pch=16, cex=.5)
-    lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], lwd=4)
-    lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[1], lwd=3)
+    #lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], lwd=4)
+    lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[1], lwd=4)
+    lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], lwd=1)
     points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$margin[nrow(curves[[i]])], col=cc[2], pch=16, cex=2)
     points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$margin[nrow(curves[[i]])], col=cc[1], pch=16, cex = 1.5)
 }
