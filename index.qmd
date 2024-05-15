@@ -156,16 +156,16 @@ legend('left', legend = lgnd$nameRecord,
 
 ```{r}
 #| echo: false
-cat("Check back soon for 2024 standings, updated daily! Opening day is May 14th.")
+#cat("Check back soon for 2024 standings, updated daily! Opening day is May 14th.")
 ```
 
 ```{r}
 #| echo: false
 #| message: false
-#year <- 2024
-#sched <- getSchedule(year)
-#standings <- getStandings(year)
-#makeWNBAstandingsGraph(year, sched, standings)
+year <- 2024
+sched <- getSchedule(year)
+standings <- getStandings(year)
+makeWNBAstandingsGraph(year, sched, standings)
 ```
 
 ## 2023
