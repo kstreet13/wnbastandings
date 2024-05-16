@@ -21,7 +21,7 @@ getStandings <- function(year){
     return(standings)
 }
 
-makeWNBAstandingsGraph <- function(year, sched, standings, mode = c('light','dark')){
+makeWNBAstandingsGraph <- function(year, sched, mode = c('light','dark')){
     mode <- match.arg(mode)
     # team colors from: https://teamcolorcodes.com/wnba-color-codes/
 # can go back as far as 2018 with these teams
@@ -71,10 +71,11 @@ curves <- lapply(teams, function(team){
     home$WL <- home$PTShome > home$PTSvis
     curve <- rbind(away, home)
     curve <- curve[order(curve$Date), ]
-    curve$margin <- cumsum(c(-1,1)[factor(curve$WL)])
+    curve$margin <- cumsum(c(-1,1)[factor(curve$WL, levels = c('FALSE','TRUE'))])
     
-    curve <- curve[, c('Date','margin')]
+    curve <- curve[, c('Date','WL','margin')]
     supp <- data.frame(Date = curve$Date-1,
+                       WL = NA,
                        margin = c(0,curve$margin[-nrow(curve)]))
     supp <- supp[!supp$Date %in% curve$Date, ]
     curve <- rbind(supp,curve)
@@ -89,30 +90,32 @@ today <- max(do.call(rbind, curves)$Date)
 for(i in seq_along(curves)){
     curve <- curves[[i]]
     if(! opening %in% curve$Date){
-        curve <- rbind(c(opening, 0), curve)
+        curve <- rbind(c(opening, NA, 0), curve)
     }
     if(! today %in% curve$Date){
-        curve <- rbind(curve, c(today, curve$margin[nrow(curve)]))
+        curve <- rbind(curve, c(today, NA, curve$margin[nrow(curve)]))
     }
     curves[[i]] <- curve
 }
 curves <- curves[order(sapply(curves, function(x){ x$margin[nrow(x)] }))]
 teamdata <- teamdata[match(names(curves), teamdata$name), ]
 teamdata$margin <- sapply(curves, function(x){ x$margin[nrow(x)] })
+teamdata$W <- sapply(curves, function(x){ sum(x$WL, na.rm=TRUE) })
+teamdata$L <- sapply(curves, function(x){ sum(!x$WL, na.rm=TRUE) })
 # all(names(curves) == teamdata$name) # check
 
 
 # check against actual standings
-standings$Team <- gsub('[*]','', standings$Team)
-for(team in teams){
-    s.i <- which(standings$Team == team)
-    c.i <- which(names(curves) == team)
-    stopifnot(curves[[c.i]]$margin[nrow(curves[[c.i]])] == standings$W[s.i] - standings$L[s.i])
-}
+# standings$Team <- gsub('[*]','', standings$Team)
+# for(team in teams){
+#     s.i <- which(standings$Team == team)
+#     c.i <- which(names(curves) == team)
+#     stopifnot(curves[[c.i]]$margin[nrow(curves[[c.i]])] == standings$W[s.i] - standings$L[s.i])
+# }
 
 # build legend df with blank row to separate non/playoff teams
 lgnd <- teamdata[nrow(teamdata):1, ]
-lgnd <- merge(lgnd, standings, by.x = 'name', by.y = 'Team')
+# lgnd <- merge(lgnd, standings, by.x = 'name', by.y = 'Team')
 lgnd <- lgnd[match(names(curves), lgnd$name), ]
 lgnd <- lgnd[nrow(lgnd):1, ]
 lgnd$nameRecord <- paste0(lgnd$name,' (',lgnd$W,'-',lgnd$L,')')
@@ -148,8 +151,8 @@ legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, col = lgnd$color1
 legend('left', legend = lgnd$nameRecord, 
        bty='n', lwd=1.1, col = lgnd$color2, cex = 1.3)
 }
-
 ```
+
 
 ::: {.panel-tabset}
 
@@ -157,17 +160,26 @@ legend('left', legend = lgnd$nameRecord,
 
 ```{r}
 #| echo: false
-#cat("Check back soon for 2024 standings, updated daily! Opening day is May 14th.")
+#| message: false
+year <- 2024
+sched <- getSchedule(year)
+# standings <- getStandings(year)
 ```
 
 ```{r}
 #| echo: false
 #| message: false
-year <- 2024
-sched <- getSchedule(year)
-standings <- getStandings(year)
-makeWNBAstandingsGraph(year, sched, standings)
+#| classes: light-mode
+makeWNBAstandingsGraph(year, sched)
 ```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+makeWNBAstandingsGraph(year, sched, mode = 'dark')
+```
+
 
 ## 2023
 ```{r}
@@ -175,21 +187,21 @@ makeWNBAstandingsGraph(year, sched, standings)
 #| message: false
 year <- 2023
 sched <- readRDS(paste0('data/sched',year,'.rds'))
-standings <- readRDS(paste0('data/standings',year,'.rds'))
+#standings <- readRDS(paste0('data/standings',year,'.rds'))
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: light-mode
-makeWNBAstandingsGraph(year, sched, standings)
+makeWNBAstandingsGraph(year, sched)
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
+makeWNBAstandingsGraph(year, sched, mode = 'dark')
 ```
 
 ## 2022
@@ -198,21 +210,21 @@ makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
 #| message: false
 year <- 2022
 sched <- readRDS(paste0('data/sched',year,'.rds'))
-standings <- readRDS(paste0('data/standings',year,'.rds'))
+#standings <- readRDS(paste0('data/standings',year,'.rds'))
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: light-mode
-makeWNBAstandingsGraph(year, sched, standings)
+makeWNBAstandingsGraph(year, sched)
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
+makeWNBAstandingsGraph(year, sched, mode = 'dark')
 ```
 
 ## 2021
@@ -221,21 +233,21 @@ makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
 #| message: false
 year <- 2021
 sched <- readRDS(paste0('data/sched',year,'.rds'))
-standings <- readRDS(paste0('data/standings',year,'.rds'))
+#standings <- readRDS(paste0('data/standings',year,'.rds'))
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: light-mode
-makeWNBAstandingsGraph(year, sched, standings)
+makeWNBAstandingsGraph(year, sched)
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
+makeWNBAstandingsGraph(year, sched, mode = 'dark')
 ```
 
 ## 2020
@@ -244,21 +256,21 @@ makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
 #| message: false
 year <- 2020
 sched <- readRDS(paste0('data/sched',year,'.rds'))
-standings <- readRDS(paste0('data/standings',year,'.rds'))
+#standings <- readRDS(paste0('data/standings',year,'.rds'))
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: light-mode
-makeWNBAstandingsGraph(year, sched, standings)
+makeWNBAstandingsGraph(year, sched)
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
+makeWNBAstandingsGraph(year, sched, mode = 'dark')
 ```
 
 ## 2019
@@ -267,21 +279,21 @@ makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
 #| message: false
 year <- 2019
 sched <- readRDS(paste0('data/sched',year,'.rds'))
-standings <- readRDS(paste0('data/standings',year,'.rds'))
+#standings <- readRDS(paste0('data/standings',year,'.rds'))
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: light-mode
-makeWNBAstandingsGraph(year, sched, standings)
+makeWNBAstandingsGraph(year, sched)
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
+makeWNBAstandingsGraph(year, sched, mode = 'dark')
 ```
 
 ## 2018
@@ -290,21 +302,21 @@ makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
 #| message: false
 year <- 2018
 sched <- readRDS(paste0('data/sched',year,'.rds'))
-standings <- readRDS(paste0('data/standings',year,'.rds'))
+#standings <- readRDS(paste0('data/standings',year,'.rds'))
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: light-mode
-makeWNBAstandingsGraph(year, sched, standings)
+makeWNBAstandingsGraph(year, sched)
 ```
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, standings, mode = 'dark')
+makeWNBAstandingsGraph(year, sched, mode = 'dark')
 ```
 
 :::
