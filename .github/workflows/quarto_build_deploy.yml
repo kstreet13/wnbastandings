@@ -3,8 +3,8 @@ on:
     branches:
       - main
   schedule:
-    - cron:  '11 2 * * *'
-# should be 4:11am PT
+    - cron:  '11 14 * * *'
+# should be 7:11am PT
 
 name: Render and Publish
 
