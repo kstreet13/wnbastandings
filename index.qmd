@@ -80,8 +80,11 @@ curves <- lapply(teams, function(team){
     supp <- supp[!supp$Date %in% curve$Date, ]
     curve <- rbind(supp,curve)
     curve <- curve[order(curve$Date), ]
-    
-    return(curve[!is.na(curve$margin), ]) # only count played games
+    curve <- curve[!is.na(curve$margin), ] # only count played games
+    if(is.na(curve$WL[nrow(curve)])){
+        curve <- curve[-nrow(curve), ]
+    }
+    return(curve)
 })
 names(curves) <- teams
 # make sure curves start the day before opening day and don't end before the current date
