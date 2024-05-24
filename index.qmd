@@ -109,9 +109,10 @@ teamdata$L <- sapply(curves, function(x){ sum(!x$WL, na.rm=TRUE) })
 
 # adjust final point locations when there are ties (for visibility)
 for(mar in unique(teamdata$margin)){
-    if(sum(teamdata$margin == mar) > 1){
+    # maximum tie size to break is 10 teams (relevant at start of season)
+    if(sum(teamdata$margin == mar) > 1 & sum(teamdata$margin == mar) < 10){
         ind <- rev(which(teamdata$margin == mar))
-        offset <- 3*(1:length(ind))-3 - 3*(length(ind)-1)/2
+        offset <- 4*(1:length(ind))-4 - 4*(length(ind)-1)/2
         for(i in 1:length(ind)){
             curves[[ind[i]]]$Date[nrow(curves[[ind[i]]])] <- 
                 curves[[ind[i]]]$Date[nrow(curves[[ind[i]]])] + offset[i]/24
