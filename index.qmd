@@ -107,6 +107,17 @@ teamdata$W <- sapply(curves, function(x){ sum(x$WL, na.rm=TRUE) })
 teamdata$L <- sapply(curves, function(x){ sum(!x$WL, na.rm=TRUE) })
 # all(names(curves) == teamdata$name) # check
 
+# adjust final point locations when there are ties (for visibility)
+for(mar in unique(teamdata$margin)){
+    if(sum(teamdata$margin == mar) > 1){
+        ind <- rev(which(teamdata$margin == mar))
+        offset <- 3*(1:length(ind))-3 - 3*(length(ind)-1)/2
+        for(i in 1:length(ind)){
+            curves[[ind[i]]]$Date[nrow(curves[[ind[i]]])] <- 
+                curves[[ind[i]]]$Date[nrow(curves[[ind[i]]])] + offset[i]/24
+        }
+    }
+}
 
 # check against actual standings
 # standings$Team <- gsub('[*]','', standings$Team)
@@ -153,6 +164,7 @@ plot.new()
 legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, col = lgnd$color1, cex = 1.3)
 legend('left', legend = lgnd$nameRecord, 
        bty='n', lwd=1.1, col = lgnd$color2, cex = 1.3)
+
 }
 ```
 
