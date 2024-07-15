@@ -90,6 +90,10 @@ names(curves) <- teams
 # make sure curves start the day before opening day and don't end before the current date
 opening <- min(do.call(rbind, curves)$Date)
 today <- max(do.call(rbind, curves)$Date)
+# it's actually yesterday, or the most recent day with games
+if(Sys.Date()-1 < max(sched$Date) & Sys.Date()-1 > today){
+    today <- Sys.Date()-1
+}
 for(i in seq_along(curves)){
     curve <- curves[[i]]
     if(! opening %in% curve$Date){
