@@ -31,13 +31,14 @@ CHI,Chicago Sky,#418FDE,#FFCD00
 CON,Connecticut Sun,#A6192E,#041E42
 DAL,Dallas Wings,#0C2340,#C4D600
 IND,Indiana Fever,#041E42,#C8102E
-LV,Las Vegas Aces,#000000,#BA0C2F
+LV,Las Vegas Aces,#000000,#8A8D8F
 LA,Los Angeles Sparks,#702F8A,#FFC72C
 MIN,Minnesota Lynx,#0C2340,#236192
 NY,New York Liberty,#6ECEB2,#000000
 PHX,Phoenix Mercury,#201747,#CB6015
 SEA,Seattle Storm,#2C5234,#FBE122
-WSH,Washington Mystics,#0C2340,#C8102E')
+WSH,Washington Mystics,#0C2340,#C8102E
+GSV,Golden State Valkyries,#AD96DC,#010101')
 
 sched <- sched[,1:5]
 # date could be in two formats, with or without commas
@@ -56,7 +57,7 @@ sched$PTShome <- as.numeric(sched$PTShome)
 teams <- unique(c(sched$Visitor, sched$Home))
 # check
 stopifnot(all(teams %in% teamdata$name))
-stopifnot(all(teamdata$name %in% teams))
+# stopifnot(all(teamdata$name %in% teams)) # teams can be added/removed
 
 
 # QC stuff. missing values, ties
@@ -88,19 +89,24 @@ curves <- lapply(teams, function(team){
 })
 names(curves) <- teams
 # make sure curves start the day before opening day and don't end before the current date
-opening <- min(do.call(rbind, curves)$Date)
-today <- max(do.call(rbind, curves)$Date)
-# it's actually yesterday, or the most recent day with games
-if(Sys.Date()-1 < max(sched$Date) & Sys.Date()-1 > today){
-    today <- Sys.Date()-1
+opening <- min(sched$Date)
+today <- Sys.Date() - 1 # it's actually yesterday, because this is set to run in the early morning
+# don't extend past the end of the season
+if(today > max(sched$Date)){
+    today <- max(sched$Date)
 }
 for(i in seq_along(curves)){
     curve <- curves[[i]]
     if(! opening %in% curve$Date){
-        curve <- rbind(c(opening, NA, 0), curve)
+        toAdd <- data.frame(Date = opening, WL = NA, margin = 0)
+        curve <- rbind(toAdd, curve)
     }
     if(! today %in% curve$Date){
-        curve <- rbind(curve, c(today, NA, curve$margin[nrow(curve)]))
+        # make sure "today" is after opening day
+        if(today > opening){
+            toAdd <- data.frame(Date = today, WL = NA, margin = curve$margin[nrow(curve)])
+            curve <- rbind(curve, toAdd)
+        }
     }
     curves[[i]] <- curve
 }
@@ -176,13 +182,38 @@ legend('left', legend = lgnd$nameRecord,
 
 ::: {.panel-tabset}
 
+## 2025
+
+```{r}
+#| echo: false
+#| message: false
+year <- 2025
+sched <- getSchedule(year)
+# standings <- getStandings(year)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
+makeWNBAstandingsGraph(year, sched)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+makeWNBAstandingsGraph(year, sched, mode = 'dark')
+```
+
+
 ## 2024
 
 ```{r}
 #| echo: false
 #| message: false
 year <- 2024
-sched <- getSchedule(year)
+sched <- readRDS(paste0('data/sched',year,'.rds'))
 # standings <- getStandings(year)
 ```
 
