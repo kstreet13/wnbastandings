@@ -1,8 +1,22 @@
 project:
   type: website
+  execute-dir: project
 
 website:
   title: "WNBA Standings"
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Current Year"
+        href: index.qmd
+      - text: "Past Years"
+        menu:
+          - text: "2024"
+            href: pages/2024.qmd
+    right:
+      - text: "About"
+        href: about.qmd
 
 format:
   html:

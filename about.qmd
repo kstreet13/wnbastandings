@@ -1,0 +1,20 @@
+---
+title: "About"
+format: 
+  html:
+    fig-width: 10
+    fig-height: 6
+    toc: false
+lightbox: true
+---
+
+
+Standings graphs were inspired by Greg Stoll's [MLB Division Race Charts](https://gregstoll.com/baseballdivisionraces/).
+
+Elo ratings were inspired by fivethirtyeight.com (RIP) and based on the system described [here](https://fivethirtyeight.com/methodology/how-our-wnba-predictions-work/), with only minor adjustments.
+
+All statistics are from the amazing [Basketball Reference](https://www.basketball-reference.com/wnba/).
+
+WNBA team colors were identified by [Team Color Codes](https://teamcolorcodes.com/wnba-color-codes/) and [TruColor](https://www.trucolor.net/portfolio/womens-national-basketball-association-official-colors-1997-through-present/).
+
+Special thanks to Lisa DeBruine for the [great demo](https://debruine.github.io/quarto_demo/dark_mode.html) on using light/dark modes in Quarto.

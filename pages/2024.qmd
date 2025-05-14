@@ -1,0 +1,122 @@
+---
+title: "2024 WNBA Results"
+format: 
+  html:
+    fig-width: 10
+    fig-height: 6
+    toc: false
+lightbox: true
+---
+
+```{r}
+#| include: false
+source('code/setupStandings.R')
+source('code/setupElo.R')
+```
+
+
+```{r}
+#| echo: false
+#| message: false
+year <- 2024
+sched <- readRDS(paste0('data/sched',year,'.rds'))
+# standings <- getStandings(year)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
+makeWNBAstandingsGraph(year, sched)
+makeWNBAeloGraph(year, allgames)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+makeWNBAstandingsGraph(year, sched, mode = 'dark')
+makeWNBAeloGraph(year, allgames, mode = 'dark')
+```
+
+# Elo Model Performance
+
+```{r}
+#| echo: false
+#| message: false
+games <- allgames[which(allgames$season == year), ]
+
+fwp <- pmax(games$homeWinProb, 1-games$homeWinProb)
+homeTeamFavored <- games$homeWinProb > .5
+homeTeamWon <- games$PTShome > games$PTSvis
+favWon <- homeTeamFavored == homeTeamWon
+
+winningTeamProb <- 100*ifelse(homeTeamWon, games$homeWinProb, 1-games$homeWinProb)
+```
+
+Percent correct: `{r} format(100*mean(favWon), digits = 4)`%
+
+Record: `{r} sum(favWon)`-`{r} sum(!favWon)`
+
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
+
+hist(winningTeamProb, breaks = seq(0,100,by=5), main="Estimated Probabilities of Wins", las=1, axes = FALSE, xlab='')
+axis(1, at = seq(0,100,by=25)); axis(2,las=1)
+hist(winningTeamProb[winningTeamProb < 50], breaks = seq(0,100,by=5), col = 2, add=TRUE)
+hist(winningTeamProb[winningTeamProb >= 50], breaks = seq(0,100,by=5), col = 3, add=TRUE)
+
+upsetIdx <- which.min(winningTeamProb)
+g <- games[upsetIdx,]
+text(0, par("usr")[4]-1, adj = c(0,1),
+     labels = paste0('','\n',
+                     format(g$Date, "%a, %b %d"),'\n',
+                     g$`Visitor/Neutral`,': ',g$PTSvis,'\n',
+                     g$`Home/Neutral`,': ',g$PTShome,'\n',
+                     'Win Prob: ',format(winningTeamProb[upsetIdx], digits = 4),'%'))
+text(0, par("usr")[4]-1, adj = c(0,1),
+     labels = paste0('Biggest Upset:','\n',
+                     '','\n',
+                     '','\n',
+                     '','\n',
+                     ''), font = 2)
+```
+
+
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
+hist(winningTeamProb, breaks = seq(0,100,by=5), main="Estimated Probabilities of Wins", las=1, axes = FALSE, xlab='')
+axis(1, at = seq(0,100,by=25)); axis(2,las=1)
+hist(winningTeamProb[winningTeamProb < 50], breaks = seq(0,100,by=5), col = 2, add=TRUE)
+hist(winningTeamProb[winningTeamProb >= 50], breaks = seq(0,100,by=5), col = 3, add=TRUE)
+
+upsetIdx <- which.min(winningTeamProb)
+g <- games[upsetIdx,]
+text(0, par("usr")[4]-1, adj = c(0,1),
+     labels = paste0('','\n',
+                     format(g$Date, "%a, %b %d"),'\n',
+                     g$`Visitor/Neutral`,': ',g$PTSvis,'\n',
+                     g$`Home/Neutral`,': ',g$PTShome,'\n',
+                     'Win Prob: ',format(winningTeamProb[upsetIdx], digits = 4),'%'))
+text(0, par("usr")[4]-1, adj = c(0,1),
+     labels = paste0('Biggest Upset:','\n',
+                     '','\n',
+                     '','\n',
+                     '','\n',
+                     ''), font = 2)
+```
+
+
+
+```{r}
+# ROC plot
+
+
+```

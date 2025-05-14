@@ -10,173 +10,8 @@ lightbox: true
 
 ```{r}
 #| include: false
-getSchedule <- function(year){
-    require(rvest)
-    sched <- html_table(read_html(paste0('https://www.basketball-reference.com/wnba/years/',year,'_games.html')))[[1]]
-    return(sched)
-}
-getStandings <- function(year){
-    require(rvest)
-    standings <- html_table(read_html(paste0('https://www.basketball-reference.com/wnba/years/',year,'_standings.html')))[[1]]
-    return(standings)
-}
-
-makeWNBAstandingsGraph <- function(year, sched, mode = c('light','dark')){
-    mode <- match.arg(mode)
-    # team colors from: https://teamcolorcodes.com/wnba-color-codes/
-# can go back as far as 2018 with these teams
-teamdata <- read.csv(text = 'team,name,color1,color2
-ATL,Atlanta Dream,#C8102E,#418FDE
-CHI,Chicago Sky,#418FDE,#FFCD00
-CON,Connecticut Sun,#A6192E,#041E42
-DAL,Dallas Wings,#0C2340,#C4D600
-IND,Indiana Fever,#041E42,#C8102E
-LV,Las Vegas Aces,#000000,#8A8D8F
-LA,Los Angeles Sparks,#702F8A,#FFC72C
-MIN,Minnesota Lynx,#0C2340,#236192
-NY,New York Liberty,#6ECEB2,#000000
-PHX,Phoenix Mercury,#201747,#CB6015
-SEA,Seattle Storm,#2C5234,#FBE122
-WSH,Washington Mystics,#0C2340,#C8102E
-GSV,Golden State Valkyries,#AD96DC,#010101')
-
-sched <- sched[,1:5]
-# date could be in two formats, with or without commas
-if(length(grep(',', sched$Date)) > 0){
-    sched$Date <- as.Date(sched$Date, format = "%a, %b %d, %Y")
-}else{
-    sched$Date <- as.Date(sched$Date, format = "%a %b %d %Y")
-}
-names(sched) <- c('Date','Visitor','PTSvis','Home','PTShome')
-# remove playoffs
-if(any(sched$Visitor == 'Playoffs')){
-    sched <- sched[1:(which.max(sched$Visitor == 'Playoffs')-1), ]
-}
-sched$PTSvis <- as.numeric(sched$PTSvis)
-sched$PTShome <- as.numeric(sched$PTShome)
-teams <- unique(c(sched$Visitor, sched$Home))
-# check
-stopifnot(all(teams %in% teamdata$name))
-# stopifnot(all(teamdata$name %in% teams)) # teams can be added/removed
-
-
-# QC stuff. missing values, ties
-if(any(!is.na(sched$PTShome) & (sched$PTShome==sched$PTSvis))){
-    stop('ties detected')
-}
-
-curves <- lapply(teams, function(team){
-    away <- sched[which(sched$Visitor == team), ]
-    away$WL <- away$PTSvis > away$PTShome
-    home <- sched[which(sched$Home == team), ]
-    home$WL <- home$PTShome > home$PTSvis
-    curve <- rbind(away, home)
-    curve <- curve[order(curve$Date), ]
-    curve$margin <- cumsum(c(-1,1)[factor(curve$WL, levels = c('FALSE','TRUE'))])
-    
-    curve <- curve[, c('Date','WL','margin')]
-    supp <- data.frame(Date = curve$Date-1,
-                       WL = NA,
-                       margin = c(0,curve$margin[-nrow(curve)]))
-    supp <- supp[!supp$Date %in% curve$Date, ]
-    curve <- rbind(supp,curve)
-    curve <- curve[order(curve$Date), ]
-    curve <- curve[!is.na(curve$margin), ] # only count played games
-    if(is.na(curve$WL[nrow(curve)])){
-        curve <- curve[-nrow(curve), ]
-    }
-    return(curve)
-})
-names(curves) <- teams
-# make sure curves start the day before opening day and don't end before the current date
-opening <- min(sched$Date)
-today <- Sys.Date() - 1 # it's actually yesterday, because this is set to run in the early morning
-# don't extend past the end of the season
-if(today > max(sched$Date)){
-    today <- max(sched$Date)
-}
-for(i in seq_along(curves)){
-    curve <- curves[[i]]
-    if(! opening %in% curve$Date){
-        toAdd <- data.frame(Date = opening, WL = NA, margin = 0)
-        curve <- rbind(toAdd, curve)
-    }
-    if(! today %in% curve$Date){
-        # make sure "today" is after opening day
-        if(today > opening){
-            toAdd <- data.frame(Date = today, WL = NA, margin = curve$margin[nrow(curve)])
-            curve <- rbind(curve, toAdd)
-        }
-    }
-    curves[[i]] <- curve
-}
-curves <- curves[order(sapply(curves, function(x){ x$margin[nrow(x)] }))]
-teamdata <- teamdata[match(names(curves), teamdata$name), ]
-teamdata$margin <- sapply(curves, function(x){ x$margin[nrow(x)] })
-teamdata$W <- sapply(curves, function(x){ sum(x$WL, na.rm=TRUE) })
-teamdata$L <- sapply(curves, function(x){ sum(!x$WL, na.rm=TRUE) })
-# all(names(curves) == teamdata$name) # check
-
-# adjust final point locations when there are ties (for visibility)
-for(mar in unique(teamdata$margin)){
-    # maximum tie size to break is 10 teams (relevant at start of season)
-    if(sum(teamdata$margin == mar) > 1 & sum(teamdata$margin == mar) < 10){
-        ind <- rev(which(teamdata$margin == mar))
-        offset <- 4*(1:length(ind))-4 - 4*(length(ind)-1)/2
-        for(i in 1:length(ind)){
-            curves[[ind[i]]]$Date[nrow(curves[[ind[i]]])] <- 
-                curves[[ind[i]]]$Date[nrow(curves[[ind[i]]])] + offset[i]/24
-        }
-    }
-}
-
-# check against actual standings
-# standings$Team <- gsub('[*]','', standings$Team)
-# for(team in teams){
-#     s.i <- which(standings$Team == team)
-#     c.i <- which(names(curves) == team)
-#     stopifnot(curves[[c.i]]$margin[nrow(curves[[c.i]])] == standings$W[s.i] - standings$L[s.i])
-# }
-
-# build legend df with blank row to separate non/playoff teams
-lgnd <- teamdata[nrow(teamdata):1, ]
-# lgnd <- merge(lgnd, standings, by.x = 'name', by.y = 'Team')
-lgnd <- lgnd[match(names(curves), lgnd$name), ]
-lgnd <- lgnd[nrow(lgnd):1, ]
-lgnd$nameRecord <- paste0(lgnd$name,' (',lgnd$W,'-',lgnd$L,')')
-lgnd <- rbind(lgnd[1:8,], NA, lgnd[9:nrow(lgnd), ])
-
-
-layout(matrix(c(1,1,1,2), nrow=1))
-par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
-if(mode == 'dark'){
-    par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
-}
-
-require(scales)
-plot(range(do.call(rbind, curves)$Date), range(sapply(curves,function(x){x$margin})), col = 'transparent',
-     xlab = 'Date', ylab='Games Over/Under .500', main = paste(year, 'WNBA Standings'), las = 1)
-#rect(min(sched$Date)-9999,-9999,max(sched$Date)+9999,9999, col='grey95')
-abline(h = 0)
-abline(h = seq(-100,-5, by=5), lty=2, col = alpha(par()$fg,.3))
-abline(h = seq(5,100, by=5), lty=2, col = alpha(par()$fg,.3))
-for(i in 1:length(curves)){
-    cc <- as.character(teamdata[teamdata$name == names(curves)[i], ][,c('color1','color2')])
-    #points(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], pch=16, cex=.5)
-    #lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], lwd=4)
-    lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[1], lwd=4)
-    lines(curves[[i]]$Date, curves[[i]]$margin, col=cc[2], lwd=1)
-    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$margin[nrow(curves[[i]])], col=cc[2], pch=16, cex=2)
-    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$margin[nrow(curves[[i]])], col=cc[1], pch=16, cex = 1.5)
-}
-
-par(mar = c(5,0,4,1)+.1)
-plot.new()
-legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, col = lgnd$color1, cex = 1.3)
-legend('left', legend = lgnd$nameRecord, 
-       bty='n', lwd=1.1, col = lgnd$color2, cex = 1.3)
-
-}
+source('code/setupStandings.R')
+source('code/setupElo.R')
 ```
 
 
@@ -222,6 +57,7 @@ sched <- readRDS(paste0('data/sched',year,'.rds'))
 #| message: false
 #| classes: light-mode
 makeWNBAstandingsGraph(year, sched)
+makeWNBAeloGraph(year, allgames)
 ```
 
 ```{r}
@@ -229,6 +65,7 @@ makeWNBAstandingsGraph(year, sched)
 #| message: false
 #| classes: dark-mode
 makeWNBAstandingsGraph(year, sched, mode = 'dark')
+makeWNBAeloGraph(year, allgames, mode = 'dark')
 ```
 
 
@@ -246,6 +83,7 @@ sched <- readRDS(paste0('data/sched',year,'.rds'))
 #| message: false
 #| classes: light-mode
 makeWNBAstandingsGraph(year, sched)
+makeWNBAeloGraph(year, allgames)
 ```
 
 ```{r}
@@ -253,6 +91,7 @@ makeWNBAstandingsGraph(year, sched)
 #| message: false
 #| classes: dark-mode
 makeWNBAstandingsGraph(year, sched, mode = 'dark')
+makeWNBAeloGraph(year, allgames, mode = 'dark')
 ```
 
 ## 2022
@@ -269,6 +108,7 @@ sched <- readRDS(paste0('data/sched',year,'.rds'))
 #| message: false
 #| classes: light-mode
 makeWNBAstandingsGraph(year, sched)
+makeWNBAeloGraph(year, allgames)
 ```
 
 ```{r}
@@ -276,6 +116,7 @@ makeWNBAstandingsGraph(year, sched)
 #| message: false
 #| classes: dark-mode
 makeWNBAstandingsGraph(year, sched, mode = 'dark')
+makeWNBAeloGraph(year, allgames, mode = 'dark')
 ```
 
 ## 2021
@@ -292,6 +133,7 @@ sched <- readRDS(paste0('data/sched',year,'.rds'))
 #| message: false
 #| classes: light-mode
 makeWNBAstandingsGraph(year, sched)
+makeWNBAeloGraph(year, allgames)
 ```
 
 ```{r}
@@ -299,6 +141,7 @@ makeWNBAstandingsGraph(year, sched)
 #| message: false
 #| classes: dark-mode
 makeWNBAstandingsGraph(year, sched, mode = 'dark')
+makeWNBAeloGraph(year, allgames, mode = 'dark')
 ```
 
 ## 2020
@@ -315,6 +158,7 @@ sched <- readRDS(paste0('data/sched',year,'.rds'))
 #| message: false
 #| classes: light-mode
 makeWNBAstandingsGraph(year, sched)
+makeWNBAeloGraph(year, allgames)
 ```
 
 ```{r}
@@ -322,64 +166,15 @@ makeWNBAstandingsGraph(year, sched)
 #| message: false
 #| classes: dark-mode
 makeWNBAstandingsGraph(year, sched, mode = 'dark')
+makeWNBAeloGraph(year, allgames, mode = 'dark')
 ```
 
-## 2019
-```{r}
-#| echo: false
-#| message: false
-year <- 2019
-sched <- readRDS(paste0('data/sched',year,'.rds'))
-#standings <- readRDS(paste0('data/standings',year,'.rds'))
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: light-mode
-makeWNBAstandingsGraph(year, sched)
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, mode = 'dark')
-```
-
-## 2018
-```{r}
-#| echo: false
-#| message: false
-year <- 2018
-sched <- readRDS(paste0('data/sched',year,'.rds'))
-#standings <- readRDS(paste0('data/standings',year,'.rds'))
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: light-mode
-makeWNBAstandingsGraph(year, sched)
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, mode = 'dark')
-```
 
 :::
 
 
-### About this site
-Each plot shows how many games above or below .500 every team was throughout the course of the season. As of 2022, the top 8 teams make the playoffs, hence the gap in the legend, but be warned that I didn't actually code up the tie-breaker scenarios, so ties are broken arbitrarily on this page.
+### About these plots
 
-This project was inspired by Greg Stoll's [MLB Division Race Charts](https://gregstoll.com/baseballdivisionraces/).
+Standings plots show how many games above or below .500 each team was throughout the course of the season. Ties are broken arbitrarily, as I didn't actually code up the tie-breaker scenarios.
 
-All statistics are from the amazing [Basketball Reference](https://www.basketball-reference.com/wnba/).
-
-WNBA team colors were identified by [Team Color Codes](https://teamcolorcodes.com/wnba-color-codes/).
-
-Special thanks to Lisa DeBruine for the [great demo](https://debruine.github.io/quarto_demo/dark_mode.html) on using light/dark modes in Quarto.
+Elo ratings are a way of estimating a team's "true" skill level, invented by Arpad Elo to rank chess players ([Wikipedia](https://en.wikipedia.org/wiki/Elo_rating_system)). The rating system used here was adapted from the WNBA ratings system implemented by fivethirtyeight.com. Ratings are partially carried over from year to year, which is why the lines have different starting values. The long-run average rating is 1500.
