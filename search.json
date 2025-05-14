@@ -1,9 +1,23 @@
 [
   {
+    "objectID": "pages/2024.html",
+    "href": "pages/2024.html",
+    "title": "2024 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nPercent correct: 66.16%\nRecord: 174-89\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# ROC plot"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Standings graphs were inspired by Greg Stoll’s MLB Division Race Charts.\nElo ratings were inspired by fivethirtyeight.com (RIP) and based on the system described here, with only minor adjustments.\nAll statistics are from the amazing Basketball Reference.\nWNBA team colors were identified by Team Color Codes and TruColor.\nSpecial thanks to Lisa DeBruine for the great demo on using light/dark modes in Quarto."
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "WNBA Standings",
     "section": "",
-    "text": "20252024202320222021202020192018\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAbout this site\nEach plot shows how many games above or below .500 every team was throughout the course of the season. As of 2022, the top 8 teams make the playoffs, hence the gap in the legend, but be warned that I didn’t actually code up the tie-breaker scenarios, so ties are broken arbitrarily on this page.\nThis project was inspired by Greg Stoll’s MLB Division Race Charts.\nAll statistics are from the amazing Basketball Reference.\nWNBA team colors were identified by Team Color Codes.\nSpecial thanks to Lisa DeBruine for the great demo on using light/dark modes in Quarto."
+    "text": "202520242023202220212020\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAbout these plots\nStandings plots show how many games above or below .500 each team was throughout the course of the season. Ties are broken arbitrarily, as I didn’t actually code up the tie-breaker scenarios.\nElo ratings are a way of estimating a team’s “true” skill level, invented by Arpad Elo to rank chess players (Wikipedia). The rating system used here was adapted from the WNBA ratings system implemented by fivethirtyeight.com. Ratings are partially carried over from year to year, which is why the lines have different starting values. The long-run average rating is 1500."
   }
 ]
