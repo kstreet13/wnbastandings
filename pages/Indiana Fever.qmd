@@ -1,0 +1,75 @@
+---
+title: "Indiana Fever History"
+format: 
+  html:
+    fig-width: 10
+    fig-height: 6
+    toc: false
+lightbox: true
+---
+
+```{r}
+#| echo: false
+#| message: false
+source('code/setupStandings.R')
+source('code/setupElo.R')
+
+getTeamElo <- function(abbr){
+    games <- allgames[which(allgames$away_team_abbr == abbr | allgames$home_team_abbr == abbr), ]
+    home <- games$home_team_abbr == abbr
+    eloPre <- ifelse(home, games$home_elo_pre, games$away_elo_pre)
+    eloPost <- ifelse(home, games$home_elo_post, games$away_elo_post)
+    # check
+    eloPreTrim <- eloPre[!is.na(eloPre)]
+    eloPostTrim <- eloPost[!is.na(eloPost)]
+    stopifnot(all(eloPreTrim[-1] == eloPostTrim[-length(eloPostTrim)] |
+                      eloPreTrim[-1] == (eloPostTrim[-length(eloPostTrim)] + 1500) / 2))
+    # add initial rating
+    elo <- c(eloPre[1], eloPost)
+    date <- c(games$Date[1]-1, games$Date)
+    season <- c(games$season[1], games$season)
+    return(data.frame(Date = date, elo = elo, season = season))
+}
+
+
+abbrs <- unique(c(allgames$home_team_abbr, allgames$away_team_abbr))
+elos <- lapply(abbrs, function(x){
+    elo <- getTeamElo(x)
+    return(elo[!is.na(elo$elo),])
+})
+names(elos) <- abbrs
+
+tmp <- do.call(rbind, elos)
+maxElo <- max(tmp$elo)
+minElo <- min(tmp$elo)
+
+layout(matrix(1:28,nrow=4,byrow = TRUE))
+par(mar=c(1,1,1,0))
+abbr <- "IND"
+for(year in 1997:2024){
+    plot(range(tmp$Date[which(tmp$season == year)]), c(minElo,maxElo), col='white', main=year, xlab='',ylab='', axes=FALSE)
+    abline(h=1500)
+    
+    # firsts <- as.Date(paste0('2024-',1:12,'-01'))
+    # segments(x0=firsts, y0=1200, y1=1220)
+    # text(as.Date((as.numeric(firsts[-1]) + as.numeric(firsts[-length(firsts)]))/2), rep(1210, length(firsts)-1), labels = c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'))
+    
+    for(elo in elos){
+        lines(elo[which(elo$season == year),], col='grey60', lwd=3)
+    }
+    elo <- elos[[abbr]]
+    elo <- elo[which(elo$season == year),]
+    lines(elo, col=2, lwd=5)
+    # check if team won championship
+    lastgame <- allgames[which(allgames$season == year), ]
+    lastgame <- lastgame[which.max(lastgame$Date), ]
+    champ <- ifelse(lastgame$PTShome > lastgame$PTSvis, lastgame$home_team_abbr, lastgame$away_team_abbr)
+    if(abbr == champ){
+        # text(elo$Date[nrow(elo)], elo$elo[nrow(elo)], label = '*', col='gold2', font=2, cex=2)
+        points(elo$Date[nrow(elo)], elo$elo[nrow(elo)], pch = 21, bg='gold2', cex=1.75)
+    }
+}
+layout(matrix(1))
+par(mar=c(5,4,4,2)+.1)
+
+```

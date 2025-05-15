@@ -6,20 +6,77 @@ website:
   title: "WNBA Standings"
   navbar:
     background: primary
+  sidebar:
+    style: "docked"
     search: true
-    left:
+    collapse-level: 1
+    contents:
       - text: "Current Year"
         href: index.qmd
-      - text: "Past Years"
-        menu:
+      - section: "Past Years"
+        contents:
           - text: "2024"
             href: pages/2024.qmd
-    right:
+          - text: "2023"
+            href: pages/2023.qmd
+          - text: "2022"
+            href: pages/2022.qmd
+          - text: "2021"
+            href: pages/2021.qmd
+          - text: "2020"
+            href: pages/2020.qmd
+          - text: "2019"
+            href: pages/2019.qmd
+          - text: "2018"
+            href: pages/2018.qmd
+          - text: "2017"
+            href: pages/2017.qmd
+          - text: "2016"
+            href: pages/2016.qmd
+          - text: "2015"
+            href: pages/2015.qmd
+          - text: "2014"
+            href: pages/2014.qmd
+          - text: "2013"
+            href: pages/2013.qmd
+          - text: "2012"
+            href: pages/2012.qmd
+          - text: "2011"
+            href: pages/2011.qmd
+          - text: "2010"
+            href: pages/2010.qmd
+          - text: "2009"
+            href: pages/2009.qmd
+          - text: "2008"
+            href: pages/2008.qmd
+          - text: "2007"
+            href: pages/2007.qmd
+          - text: "2006"
+            href: pages/2006.qmd
+          - text: "2005"
+            href: pages/2005.qmd
+          - text: "2004"
+            href: pages/2004.qmd
+          - text: "2003"
+            href: pages/2003.qmd
+          - text: "2002"
+            href: pages/2002.qmd
+          - text: "2001"
+            href: pages/2001.qmd
+          - text: "2000"
+            href: pages/2000.qmd
+          - text: "1999"
+            href: pages/1999.qmd
+          - text: "1998"
+            href: pages/1998.qmd
+          - text: "1997"
+            href: pages/1997.qmd
       - text: "About"
         href: about.qmd
 
 format:
   html:
+    respect-user-color-scheme: true
     theme:
       light: [flatly, light.scss]
       dark: [darkly, dark.scss]

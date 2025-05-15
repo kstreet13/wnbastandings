@@ -1,0 +1,268 @@
+---
+title: "2006 WNBA Results"
+format: 
+  html:
+    fig-width: 10
+    fig-height: 6
+    toc: false
+lightbox: true
+---
+
+```{r}
+#| include: false
+source('code/setupStandings.R')
+source('code/setupElo.R')
+```
+
+
+```{r}
+#| echo: false
+#| message: false
+year <- 2006
+sched <- readRDS(paste0('data/sched',year,'.rds'))
+# standings <- getStandings(year)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
+makeWNBAstandingsGraph(year, sched)
+makeWNBAeloGraph(year, allgames)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+makeWNBAstandingsGraph(year, sched, mode = 'dark')
+makeWNBAeloGraph(year, allgames, mode = 'dark')
+```
+
+# Elo Model Performance
+
+For each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model "picks" whichever team has better than a 50% chance of winning.
+
+```{r}
+#| echo: false
+#| message: false
+games <- allgames[which(allgames$season == year), ]
+
+fwp <- pmax(games$homeWinProb, 1-games$homeWinProb)
+homeTeamFavored <- games$homeWinProb > .5
+homeTeamWon <- games$PTShome > games$PTSvis
+favWon <- homeTeamFavored == homeTeamWon
+
+winningTeamProb <- 100*ifelse(homeTeamWon, games$homeWinProb, 1-games$homeWinProb)
+
+pc <- 100*mean(favWon)
+```
+
+Percent correct: **`{r} format(pc, digits = 4)`%**
+
+Record: **`{r} sum(favWon)`-`{r} sum(!favWon)`**
+
+```{r lightmode1}
+#| echo: false
+#| message: false
+#| fig-height: 4
+#| classes: light-mode
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+
+# what would it look like if probabilities were *exactly* correct?
+perfect_probs_boot <- sapply(1:10000, function(i){
+    fwp <- pmax(games$homeWinProb, 1-games$homeWinProb)
+    homeTeamFavored <- games$homeWinProb > .5
+    # random winner, with probability = homeWinProb
+    homeTeamWon <- runif(nrow(games)) < games$homeWinProb
+    favWon <- homeTeamFavored == homeTeamWon
+    return(sum(favWon))
+})
+random_boot <- sapply(1:10000, function(i){
+    fwp <- pmax(games$homeWinProb, 1-games$homeWinProb)
+    homeTeamFavored <- games$homeWinProb > .5
+    # random winner, with probability = homeWinProb
+    homeTeamWon <- runif(nrow(games)) < .5
+    favWon <- homeTeamFavored == homeTeamWon
+    return(sum(favWon))
+})
+hist(perfect_probs_boot, breaks=50, xlim=c(0,nrow(games)), col=4, border = NA, freq = FALSE, main = "How many games could be picked by...", las=1, xlab = 'Number of Correct Picks')
+hist(random_boot, breaks=50, add=TRUE, col=2, border = NA, freq=FALSE)
+abline(v=sum(favWon), lwd=2)
+abline(v=quantile(perfect_probs_boot, c(.025,.975)), lty=2, col=4)
+abline(v=quantile(random_boot, c(.025,.975)), lty=2, col=2)
+
+legend('topleft', fill = c(2,4), legend = c('random guessing','a perfect model'), text.font = 2, bty='n', border=NA, cex=1.5)
+
+legend('bottomleft', legend = c('95% Confidence Interval','Actual # Correct Picks'), bty='n', lty = c(2,1), lwd = c(1,2))
+```
+
+```{r darkmode1}
+#| echo: false
+#| message: false
+#| fig-height: 4
+#| classes: dark-mode
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
+
+# what would it look like if probabilities were *exactly* correct?
+perfect_probs_boot <- sapply(1:10000, function(i){
+    fwp <- pmax(games$homeWinProb, 1-games$homeWinProb)
+    homeTeamFavored <- games$homeWinProb > .5
+    # random winner, with probability = homeWinProb
+    homeTeamWon <- runif(nrow(games)) < games$homeWinProb
+    favWon <- homeTeamFavored == homeTeamWon
+    return(sum(favWon))
+})
+random_boot <- sapply(1:10000, function(i){
+    fwp <- pmax(games$homeWinProb, 1-games$homeWinProb)
+    homeTeamFavored <- games$homeWinProb > .5
+    # random winner, with probability = homeWinProb
+    homeTeamWon <- runif(nrow(games)) < .5
+    favWon <- homeTeamFavored == homeTeamWon
+    return(sum(favWon))
+})
+hist(perfect_probs_boot, breaks=50, xlim=c(0,nrow(games)), col=4, border = NA, freq = FALSE, main = "How many games could be picked by...", las=1, xlab = 'Number of Correct Picks')
+hist(random_boot, breaks=50, add=TRUE, col=2, border = NA, freq=FALSE)
+abline(v=sum(favWon), lwd=2)
+abline(v=quantile(perfect_probs_boot, c(.025,.975)), lty=2, col=4)
+abline(v=quantile(random_boot, c(.025,.975)), lty=2, col=2)
+
+legend('topleft', fill = c(2,4), legend = c('random guessing','a perfect model'), text.font = 2, bty='n', border=NA, cex=1.5)
+
+legend('bottomleft', legend = c('95% Confidence Interval','Actual # Correct Picks'), bty='n', lty = c(2,1), lwd = c(1,2))
+```
+
+Even if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its "pick" will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.
+
+```{r lightmode2}
+#| echo: false
+#| message: false
+#| fig-height: 4.5
+#| fig-width: 8
+#| classes: light-mode
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+
+# histogram of winning probs
+hist(winningTeamProb, breaks = seq(0,100,by=5), main="How likely was each win?", las=1, axes = FALSE, xlab='Estimated Probability of Winning', border = NA)
+axis(1, at = seq(0,100,by=25)); axis(2,las=1)
+hist(winningTeamProb[winningTeamProb < 50], breaks = seq(0,100,by=5), col = 2, add=TRUE, border = NA)
+hist(winningTeamProb[winningTeamProb >= 50], breaks = seq(0,100,by=5), col = 3, add=TRUE, border = NA)
+text(min(winningTeamProb),0,labels='*',font=2,pos=3)
+
+upsetIdx <- which.min(winningTeamProb)
+g <- games[upsetIdx,]
+text(0, par("usr")[4]-1, adj = c(0,1),
+     labels = paste0('','\n',
+                     format(g$Date, "%a, %b %d"),'\n',
+                     g$`Visitor/Neutral`,': ',g$PTSvis,'\n',
+                     g$`Home/Neutral`,': ',g$PTShome,'\n',
+                     'Win Prob: ',format(winningTeamProb[upsetIdx], digits = 4),'%'))
+text(0, par("usr")[4]-1, adj = c(0,1),
+     labels = paste0('* Biggest Upset:','\n',
+                     '','\n',
+                     '','\n',
+                     '','\n',
+                     ''), font = 2)
+
+layout(matrix(1:2, nrow=1))
+
+# quantile-based calibration
+# check win prob accuracy
+cuts <- quantile(games$homeWinProb, probs = seq(0,1, .1))
+cuts[length(cuts)] <- 1
+predProb <- 100*sapply(2:length(cuts), function(ii){
+    mean(games$homeWinProb[games$homeWinProb >= cuts[ii-1] & games$homeWinProb < cuts[ii]])
+})
+actualProb <- 100*sapply(2:length(cuts), function(ii){
+    mean(homeTeamWon[games$homeWinProb >= cuts[ii-1] & games$homeWinProb < cuts[ii]])
+})
+gameRange <- range(table(cut(games$homeWinProb, breaks=cuts)))
+plot(c(0,100),c(0,100), col='transparent',asp=1, xaxs='i',yaxs='i',las=1,
+     xlab='Predicted Home Win Prob.', main = 'Model Calibration',
+     ylab= 'Observed Home Win %')
+abline(0,1, lty=2)
+grid()
+legend('topleft', title=paste0('\nEach point represents\n', gameRange[1], ' to ', gameRange[2], ' games'), bty='n', legend='', title.font = 2)
+points(predProb, actualProb, pch=16)
+
+
+# predicted win prob vs. margin
+mar <- games$PTShome - games$PTSvis
+hwp <- 100*games$homeWinProb
+plot(100*games$homeWinProb, mar, pch=16, main='Point Difference', las=1, xlim=c(0,100), col = alpha(par("fg"), alpha=.5),
+     xlab='Predicted Home Win Prob.',
+     ylab='Home Margin of Victory/Defeat')
+abline(h=0, lty=2)
+abline(lm(mar ~ hwp), col=2, lwd=2)
+
+
+layout(matrix(1))
+```
+
+```{r darkmode2}
+#| echo: false
+#| message: false
+#| fig-height: 4.5
+#| fig-width: 8
+#| classes: dark-mode
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
+
+
+# histogram of winning probs
+hist(winningTeamProb, breaks = seq(0,100,by=5), main="How likely was each win?", las=1, axes = FALSE, xlab='Estimated Probability of Winning', border = NA)
+axis(1, at = seq(0,100,by=25)); axis(2,las=1)
+hist(winningTeamProb[winningTeamProb < 50], breaks = seq(0,100,by=5), col = 2, add=TRUE, border = NA)
+hist(winningTeamProb[winningTeamProb >= 50], breaks = seq(0,100,by=5), col = 3, add=TRUE, border = NA)
+text(min(winningTeamProb),0,labels='*',font=2,pos=3)
+
+upsetIdx <- which.min(winningTeamProb)
+g <- games[upsetIdx,]
+text(0, par("usr")[4]-1, adj = c(0,1),
+     labels = paste0('','\n',
+                     format(g$Date, "%a, %b %d"),'\n',
+                     g$`Visitor/Neutral`,': ',g$PTSvis,'\n',
+                     g$`Home/Neutral`,': ',g$PTShome,'\n',
+                     'Win Prob: ',format(winningTeamProb[upsetIdx], digits = 4),'%'))
+text(0, par("usr")[4]-1, adj = c(0,1),
+     labels = paste0('* Biggest Upset:','\n',
+                     '','\n',
+                     '','\n',
+                     '','\n',
+                     ''), font = 2)
+
+layout(matrix(1:2, nrow=1))
+
+# quantile-based calibration
+# check win prob accuracy
+cuts <- quantile(games$homeWinProb, probs = seq(0,1, .1))
+cuts[length(cuts)] <- 1
+predProb <- 100*sapply(2:length(cuts), function(ii){
+    mean(games$homeWinProb[games$homeWinProb >= cuts[ii-1] & games$homeWinProb < cuts[ii]])
+})
+actualProb <- 100*sapply(2:length(cuts), function(ii){
+    mean(homeTeamWon[games$homeWinProb >= cuts[ii-1] & games$homeWinProb < cuts[ii]])
+})
+gameRange <- range(table(cut(games$homeWinProb, breaks=cuts)))
+plot(c(0,100),c(0,100), col='transparent',asp=1, xaxs='i',yaxs='i',las=1,
+     xlab='Predicted Home Win Prob.', main = 'Model Calibration',
+     ylab= 'Observed Home Win %')
+abline(0,1, lty=2)
+grid()
+legend('topleft', title=paste0('\nEach point represents\n', gameRange[1], ' to ', gameRange[2], ' games'), bty='n', legend='', title.font = 2)
+points(predProb, actualProb, pch=16)
+
+
+# predicted win prob vs. margin
+mar <- games$PTShome - games$PTSvis
+hwp <- 100*games$homeWinProb
+plot(100*games$homeWinProb, mar, pch=16, main='Point Difference', las=1, xlim=c(0,100), col = alpha(par("fg"), alpha=.5),
+     xlab='Predicted Home Win Prob.',
+     ylab='Home Margin of Victory/Defeat')
+abline(h=0, lty=2)
+abline(lm(mar ~ hwp), col=2, lwd=2)
+
+
+layout(matrix(1))
+```
