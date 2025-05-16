@@ -1,5 +1,5 @@
 ---
-title: "WNBA Standings"
+title: "2025 WNBA Standings"
 format: 
   html:
     fig-width: 10
@@ -14,10 +14,6 @@ source('code/setupStandings.R')
 source('code/setupElo.R')
 ```
 
-
-::: {.panel-tabset}
-
-## 2025
 
 ```{r}
 #| echo: false
@@ -42,21 +38,134 @@ makeWNBAstandingsGraph(year, sched, mode = 'dark')
 ```
 
 
-## 2024
 
 ```{r}
 #| echo: false
 #| message: false
-year <- 2024
-sched <- readRDS(paste0('data/sched',year,'.rds'))
-# standings <- getStandings(year)
+# update allgames to include partial season
+# remove unnamed column
+sched <- sched[,names(sched) != ""]
+# add Notes column, if missing
+if(!"Notes" %in% names(sched)){
+    sched$Notes <- ""
+}
+sched$season <- year
+# annotate playoffs
+sched$playoffs <- FALSE
+if(any(sched$`Visitor/Neutral` == 'Playoffs')){
+    cut <- which.max(sched$`Visitor/Neutral` == 'Playoffs')
+    sched$playoffs[cut:nrow(sched)] <- TRUE
+    sched <- sched[-cut, ]
+}
+sched$Date <- as.Date(sched$Date, format = "%a, %b %d, %Y")
+names(sched)[3] <- 'PTSvis'
+names(sched)[5] <- 'PTShome'
+sched$PTSvis <- as.numeric(sched$PTSvis)
+sched$PTShome <- as.numeric(sched$PTShome)
+sched$season <- as.numeric(sched$season)
+teams <- unique(c(sched$`Visitor/Neutral`, sched$`Home/Neutral`))
+sched <- sched[order(sched$Date), ]
+sched$neutral <- FALSE
+sched$neutral[grep('neutral', tolower(sched$Notes))] <- TRUE
+sched$home_team_abbr <- ""
+sched$away_team_abbr <- ""
+sched$home_team_abbr[sched$`Home/Neutral` %in% c("Orlando Miracle","Connecticut Sun")] <- "CON"
+sched$away_team_abbr[sched$`Visitor/Neutral` %in% c("Orlando Miracle","Connecticut Sun")] <- "CON"
+sched$home_team_abbr[sched$`Home/Neutral` %in% c("Utah Starzz","San Antonio Silver Stars","Las Vegas Aces")] <- "LVA"
+sched$away_team_abbr[sched$`Visitor/Neutral` %in% c("Utah Starzz","San Antonio Silver Stars","Las Vegas Aces")] <- "LVA"
+sched$home_team_abbr[sched$`Home/Neutral` %in% c("Detroit Shock","Tulsa Shock","Dallas Wings")] <- "DAL"
+sched$away_team_abbr[sched$`Visitor/Neutral` %in% c("Detroit Shock","Tulsa Shock","Dallas Wings")] <- "DAL"
+sched$home_team_abbr[sched$`Home/Neutral` == "Atlanta Dream"] <- "ATL"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Atlanta Dream"] <- "ATL"
+sched$home_team_abbr[sched$`Home/Neutral` == "Charlotte Sting"] <- "CHA"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Charlotte Sting"] <- "CHA"
+sched$home_team_abbr[sched$`Home/Neutral` == "Chicago Sky"] <- "CHI"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Chicago Sky"] <- "CHI"
+sched$home_team_abbr[sched$`Home/Neutral` == "Cleveland Rockers"] <- "CLE"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Cleveland Rockers"] <- "CLE"
+sched$home_team_abbr[sched$`Home/Neutral` == "Houston Comets"] <- "HOU"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Houston Comets"] <- "HOU"
+sched$home_team_abbr[sched$`Home/Neutral` == "Indiana Fever"] <- "IND"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Indiana Fever"] <- "IND"
+sched$home_team_abbr[sched$`Home/Neutral` == "Los Angeles Sparks"] <- "LAS"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Los Angeles Sparks"] <- "LAS"
+sched$home_team_abbr[sched$`Home/Neutral` == "Miami Sol"] <- "MIA"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Miami Sol"] <- "MIA"
+sched$home_team_abbr[sched$`Home/Neutral` == "Minnesota Lynx"] <- "MIN"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Minnesota Lynx"] <- "MIN"
+sched$home_team_abbr[sched$`Home/Neutral` == "New York Liberty"] <- "NYL"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "New York Liberty"] <- "NYL"
+sched$home_team_abbr[sched$`Home/Neutral` == "Phoenix Mercury"] <- "PHX"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Phoenix Mercury"] <- "PHX"
+sched$home_team_abbr[sched$`Home/Neutral` == "Portland Fire"] <- "POR"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Portland Fire"] <- "POR"
+sched$home_team_abbr[sched$`Home/Neutral` == "Sacramento Monarchs"] <- "SAC"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Sacramento Monarchs"] <- "SAC"
+sched$home_team_abbr[sched$`Home/Neutral` == "Seattle Storm"] <- "SEA"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Seattle Storm"] <- "SEA"
+sched$home_team_abbr[sched$`Home/Neutral` == "Washington Mystics"] <- "WAS"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Washington Mystics"] <- "WAS"
+sched$home_team_abbr[sched$`Home/Neutral` == "Golden State Valkyries"] <- "GSV"
+sched$away_team_abbr[sched$`Visitor/Neutral` == "Golden State Valkyries"] <- "GSV"
+
+stopifnot(!any(sched$home_team_abbr == ""))
+stopifnot(!any(sched$away_team_abbr == ""))
+
+# add columns for pre- and post-game Elo rating, as well as home team win prob.
+sched$away_elo_pre <- sched$away_elo_post <- sched$home_elo_pre <- sched$home_elo_post <- sched$homeWinProb <- NA
+
+# add columns for home/away game number (for the season)
+sched$home_gameNo <- sapply(1:nrow(sched), function(ii){
+    ytd <- sched[which(sched$season == sched$season[ii] & sched$Date < sched$Date[ii] &
+                              (sched$away_team_abbr == sched$home_team_abbr[ii] | sched$home_team_abbr == sched$home_team_abbr[ii])), ]
+    return(nrow(ytd)+1)
+})
+sched$away_gameNo <- sapply(1:nrow(sched), function(ii){
+    ytd <- sched[which(sched$season == sched$season[ii] & sched$Date < sched$Date[ii] &
+                              (sched$away_team_abbr == sched$away_team_abbr[ii] | sched$home_team_abbr == sched$away_team_abbr[ii])), ]
+    return(nrow(ytd)+1)
+})
+# add current season to all games
+allgames <- rbind(allgames, sched)
+# calculate Elo for current season
+season <- year
+for(gi in 1:sum(allgames$season == season)){
+    idx <- which(allgames$season == season)[gi]
+    game <- allgames[idx,]
+    
+    # search for previous Elo ratings
+    game$away_elo_pre <- prevElo(game$away_team_abbr, game$Date, game$season)
+    game$home_elo_pre <- prevElo(game$home_team_abbr, game$Date, game$season)
+    
+    # calculate win prob
+    if(!is.na(game$home_elo_pre) & !is.na(game$away_elo_pre)){
+        game$homeWinProb <- homeWinProb(game)
+    }
+    
+    # calculate update
+    if(!is.na(game$PTShome) & !is.na(game$PTSvis)){
+        hshift <- homeEloShift(game)
+        if(game$PTShome > game$PTSvis) stopifnot(hshift > 0)
+        ashift <- awayEloShift(game)
+        if(game$PTShome < game$PTSvis) stopifnot(ashift > 0)
+        if(game$home_gameNo==game$away_gameNo){
+            stopifnot(round(hshift, digits = 4) == round(-ashift, digits = 4))
+        }
+        # update
+        game$away_elo_post <- game$away_elo_pre + ashift
+        game$home_elo_post <- game$home_elo_pre + hshift
+    }
+    allgames[idx,] <- game
+}
+
+# rm(sched)
 ```
+
 
 ```{r}
 #| echo: false
 #| message: false
 #| classes: light-mode
-makeWNBAstandingsGraph(year, sched)
 makeWNBAeloGraph(year, allgames)
 ```
 
@@ -64,113 +173,9 @@ makeWNBAeloGraph(year, allgames)
 #| echo: false
 #| message: false
 #| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, mode = 'dark')
 makeWNBAeloGraph(year, allgames, mode = 'dark')
 ```
 
-
-## 2023
-```{r}
-#| echo: false
-#| message: false
-year <- 2023
-sched <- readRDS(paste0('data/sched',year,'.rds'))
-#standings <- readRDS(paste0('data/standings',year,'.rds'))
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: light-mode
-makeWNBAstandingsGraph(year, sched)
-makeWNBAeloGraph(year, allgames)
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, mode = 'dark')
-makeWNBAeloGraph(year, allgames, mode = 'dark')
-```
-
-## 2022
-```{r}
-#| echo: false
-#| message: false
-year <- 2022
-sched <- readRDS(paste0('data/sched',year,'.rds'))
-#standings <- readRDS(paste0('data/standings',year,'.rds'))
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: light-mode
-makeWNBAstandingsGraph(year, sched)
-makeWNBAeloGraph(year, allgames)
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, mode = 'dark')
-makeWNBAeloGraph(year, allgames, mode = 'dark')
-```
-
-## 2021
-```{r}
-#| echo: false
-#| message: false
-year <- 2021
-sched <- readRDS(paste0('data/sched',year,'.rds'))
-#standings <- readRDS(paste0('data/standings',year,'.rds'))
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: light-mode
-makeWNBAstandingsGraph(year, sched)
-makeWNBAeloGraph(year, allgames)
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, mode = 'dark')
-makeWNBAeloGraph(year, allgames, mode = 'dark')
-```
-
-## 2020
-```{r}
-#| echo: false
-#| message: false
-year <- 2020
-sched <- readRDS(paste0('data/sched',year,'.rds'))
-#standings <- readRDS(paste0('data/standings',year,'.rds'))
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: light-mode
-makeWNBAstandingsGraph(year, sched)
-makeWNBAeloGraph(year, allgames)
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| classes: dark-mode
-makeWNBAstandingsGraph(year, sched, mode = 'dark')
-makeWNBAeloGraph(year, allgames, mode = 'dark')
-```
-
-
-:::
 
 
 ### About these plots
@@ -178,3 +183,57 @@ makeWNBAeloGraph(year, allgames, mode = 'dark')
 Standings plots show how many games above or below .500 each team was throughout the course of the season. Ties are broken arbitrarily, as I didn't actually code up the tie-breaker scenarios.
 
 Elo ratings are a way of estimating a team's "true" skill level, invented by Arpad Elo to rank chess players ([Wikipedia](https://en.wikipedia.org/wiki/Elo_rating_system)). The rating system used here was adapted from the WNBA ratings system implemented by fivethirtyeight.com. Ratings are partially carried over from year to year, which is why the lines have different starting values. The long-run average rating is 1500.
+
+
+
+# Upcoming Games
+
+```{r}
+#| echo: false
+#| message: false
+#| fig-height: 1.5
+#| fig-width: 8
+
+upcoming <- allgames[which(allgames$season == year & is.na(allgames$PTShome)), ]
+if(nrow(upcoming) > 6){
+    upcoming <- upcoming[1:6, ]
+}
+getRecord <- function(team, sched){
+    away <- sched[which(sched$`Visitor/Neutral` == team), ]
+    awayWL <- away$PTSvis > away$PTShome
+    awayWL <- awayWL[!is.na(awayWL)]
+    home <- sched[which(sched$`Home/Neutral` == team), ]
+    homeWL <- home$PTShome > home$PTSvis
+    homeWL <- homeWL[!is.na(homeWL)]
+    record <- c(sum(c(awayWL,homeWL)), sum(c(!awayWL,!homeWL)))
+    return(record)
+}
+
+layout(matrix(1:2, nrow=1))
+
+plotGame <- function(game, rA, rH){
+    par(mar=c(.1,.1,.1,.1))
+    plot(0:1,0:1,col='transparent', axes=FALSE)
+    rect(0,1/3,1,2/3, col=alpha(par("fg"),alpha=.1), border = NA)
+    rect(0,0,1,2/3, col='transparent')
+    
+    text(0,5/6, labels = format(game$Date, "%a, %b %d"), pos = 4)
+    text(0,.5, labels = paste0(game$`Visitor/Neutral`,' (',rA[1],'-',rA[2],')'), pos = 4, font = 2)
+    text(0,1/6, labels = paste0(game$`Home/Neutral`,' (',rH[1],'-',rH[2],')'), pos = 4, font = 2)
+    
+    text(1,5/6, labels = "WinProb", pos = 2)
+    text(1,.5, labels = paste0(format(100*(1-game$homeWinProb), digits = 3, nsmall = 1),'%'), pos = 2)
+    text(1,1/6, labels = paste0(format(100*(game$homeWinProb), digits = 3, nsmall = 1),'%'), pos = 2)
+}
+
+for(i in seq_len(nrow(upcoming))){
+    plotGame(upcoming[i,], getRecord(game$`Visitor/Neutral`, sched), getRecord(game$`Home/Neutral`, sched))
+}
+
+par(mar = c(5,4,4,2)+.1)
+layout(matrix(1))
+
+```
+
+
+

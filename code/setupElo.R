@@ -317,6 +317,9 @@ makeWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
         curve <- curve[order(curve$Date), ]
         curves[[i]] <- curve
     }
+    # remove NAs (only relevant for current season)
+    curves <- lapply(curves, function(x){ x[!is.na(x$elo), ]})
+    
     # sort by final elo
     curves <- curves[order(sapply(curves, function(x){ x$elo[nrow(x)] }))]
     teamdata <- teamcolors[match(names(curves), teamcolors$name), ]
@@ -343,9 +346,6 @@ makeWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     abline(h = 1500, lty = 2)
     
     #rect(min(sched$Date)-9999,-9999,max(sched$Date)+9999,9999, col='grey95')
-    abline(h = 0)
-    abline(h = seq(-100,-5, by=5), lty=2, col = alpha(par()$fg,.3))
-    abline(h = seq(5,100, by=5), lty=2, col = alpha(par()$fg,.3))
     for(i in 1:length(curves)){
         cc <- as.character(teamdata[teamdata$name == names(curves)[i], ][,c('color1','color2')])
         #points(curves[[i]]$Date, curves[[i]]$elo, col=cc[2], pch=16, cex=.5)
@@ -366,4 +366,103 @@ makeWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     legend('left', legend = lgnd$nameElo, 
            bty='n', lwd=1.1, col = lgnd$color2, cex = 1.3)
     
+}
+
+# single-year plot with one team highlighted, for team histories
+makeWNBAeloHiliteGraph <- function(year, allgames, mode = c('light','dark')){
+    mode <- match.arg(mode)
+    
+    games <- allgames[which(allgames$season == year), ]
+    
+    eloA <- games[,c('Date','Visitor/Neutral','season','away_team_abbr','away_elo_pre','away_elo_post')]
+    eloH <- games[,c('Date','Home/Neutral','season','home_team_abbr','home_elo_pre','home_elo_post')]
+    names(eloA) <- c('Date','Team_Name','season','team_abbr','elo_pre','elo_post')
+    names(eloH) <- names(eloA)
+    elo <- rbind(eloA, eloH)
+    elo <- elo[order(elo$Date), ]
+    rm(eloA,eloH)
+    
+    teams <- unique(elo$Team_Name)
+    
+    # check
+    stopifnot(all(teams %in% teamcolors$name))
+    # stopifnot(all(teamcolors$name %in% teams)) # teams can be added/removed
+    
+    # QC stuff. missing values, etc.
+    
+    # add initial value
+    opening <- min(elo$Date)
+    for(team.i in teams){
+        toAdd <- elo[which.max(elo$Team_Name == team.i), ]
+        toAdd$Date <- opening - 1
+        toAdd$elo_post <- toAdd$elo_pre
+        elo <- rbind(toAdd, elo)
+    }
+    finale <- max(games$Date[which(!games$playoffs)])
+    
+    curves <- lapply(teams, function(team){
+        idx <- which(elo$Team_Name == team)
+        curve <- data.frame(Date = elo$Date[idx],
+                            elo = elo$elo_post[idx])
+        # already added starting value, but want intermediate values, so it's clear when games happen
+        supp <- data.frame(Date = curve$Date-1,
+                           elo = c(0,curve$elo[-nrow(curve)]))
+        supp <- supp[-1, ]
+        supp <- supp[!supp$Date %in% curve$Date, ]
+        curve <- rbind(supp,curve)
+        curve <- curve[order(curve$Date), ]
+        # curve <- curve[!is.na(curve$margin), ] # only count played games
+        # if(is.na(curve$WL[nrow(curve)])){
+        #     curve <- curve[-nrow(curve), ]
+        # }
+        # 
+        return(curve)
+    })
+    names(curves) <- teams
+    
+    # only for past seasons
+    today <- max(games$Date)
+    
+    for(i in seq_along(curves)){
+        curve <- curves[[i]]
+        if(! today %in% curve$Date){
+            # make sure "today" is after opening day.
+            # stop extending lines when regular season ends, only playoff teams should continue
+            if(today > opening & today <= finale){
+                toAdd <- data.frame(Date = today, elo = curve$elo[nrow(curve)])
+                curve <- rbind(curve, toAdd)
+            }
+        }
+        curve <- curve[order(curve$Date), ]
+        curves[[i]] <- curve
+    }
+    # sort by final elo
+    curves <- curves[order(sapply(curves, function(x){ x$elo[nrow(x)] }))]
+    teamdata <- teamcolors[match(names(curves), teamcolors$name), ]
+    teamdata$elo <- sapply(curves, function(x){ x$elo[nrow(x)] })
+    # all(names(curves) == teamdata$name) # check
+    
+    par(cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+    if(mode == 'dark'){
+        par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
+    }
+    
+    require(scales)
+    xl <- range(do.call(rbind, curves)$Date)
+    yl <- range(c(allgames$home_elo_post, allgames$away_elo_post))
+    plot(xl, yl, col = 'transparent',
+         xlab = '', ylab='', main = year, las = 1)
+    rect(finale, -9999, finale+10000, 9999, col = alpha(par()$fg, alpha = .15), border = NA)
+    abline(h = 1500, lty = 2)
+    
+    #rect(min(sched$Date)-9999,-9999,max(sched$Date)+9999,9999, col='grey95')
+    for(i in 1:length(curves)){
+        #points(curves[[i]]$Date, curves[[i]]$elo, col=cc[2], pch=16, cex=.5)
+        #lines(curves[[i]]$Date, curves[[i]]$elo, col=cc[2], lwd=4)
+        lines(curves[[i]]$Date, curves[[i]]$elo, col='grey50', lwd=2)
+    }
+    cc <- as.character(teamdata[teamdata$name == team, ][,c('color1','color2')])
+    curve <- curves[[team]]
+    lines(curve$Date, curve$elo, col=cc[1], lwd=4)
+    lines(curve$Date, curve$elo, col=cc[2], lwd=1)
 }
