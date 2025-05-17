@@ -362,9 +362,10 @@ makeWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     
     par(mar = c(5,0,4,1)+.1)
     plot.new()
-    legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, col = lgnd$color1, cex = 1.3)
-    legend('left', legend = lgnd$nameElo, 
-           bty='n', lwd=1.1, col = lgnd$color2, cex = 1.3)
+    legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, 
+           col = lgnd$color1, cex = 1.3)
+    legend('left', legend = lgnd$nameElo, bty='n', lwd=1.1, 
+           col = lgnd$color2, cex = 1.3)
     
 }
 
