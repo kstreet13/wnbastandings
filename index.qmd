@@ -222,12 +222,16 @@ plotGame <- function(game, rA, rH){
     text(0,1/6, labels = paste0(game$`Home/Neutral`,' (',rH[1],'-',rH[2],')'), pos = 4, font = 2)
     
     text(1,5/6, labels = "WinProb", pos = 2)
-    text(1,.5, labels = paste0(format(100*(1-game$homeWinProb), digits = 3, nsmall = 1),'%'), pos = 2)
+    if(!is.na(game$homeWinProb)){
+            text(1,.5, labels = paste0(format(100*(1-game$homeWinProb), digits = 3, nsmall = 1),'%'), pos = 2)
     text(1,1/6, labels = paste0(format(100*(game$homeWinProb), digits = 3, nsmall = 1),'%'), pos = 2)
+    }
+
 }
 
 for(i in seq_len(nrow(upcoming))){
-    plotGame(upcoming[i,], getRecord(game$`Visitor/Neutral`, sched), getRecord(game$`Home/Neutral`, sched))
+    game <- upcoming[i,]
+    plotGame(game, getRecord(game$`Visitor/Neutral`, sched), getRecord(game$`Home/Neutral`, sched))
 }
 
 par(mar = c(5,4,4,2)+.1)
