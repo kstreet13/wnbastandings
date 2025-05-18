@@ -191,7 +191,7 @@ Elo ratings are a way of estimating a team's "true" skill level, invented by Arp
 ```{r}
 #| echo: false
 #| message: false
-
+# get upcoming games
 upcoming <- allgames[which(allgames$season == year & is.na(allgames$PTShome)), ]
 if(nrow(upcoming) > 6){
     upcoming <- upcoming[1:6, ]
@@ -212,17 +212,34 @@ plotGame <- function(game, rA, rH){
     plot(0:1,0:1,col='transparent', axes=FALSE)
     rect(0,1/3,1,2/3, col=alpha(par("fg"),alpha=.1), border = NA)
     rect(0,0,1,2/3, col='transparent')
-    
+    # date, team names
     text(0,5/6, labels = format(game$Date, "%a, %b %d"), pos = 4)
     text(0,.5, labels = paste0(game$`Visitor/Neutral`,' (',rA[1],'-',rA[2],')'), pos = 4, font = 2)
     text(0,1/6, labels = paste0(game$`Home/Neutral`,' (',rH[1],'-',rH[2],')'), pos = 4, font = 2)
     
-    text(1,5/6, labels = "WinProb", pos = 2)
-    if(!is.na(game$homeWinProb)){
-        
+    if(!is.na(game$PTSvis)){ # game has already happened
+        # Score
+        text(1,5/6, labels = "Score", pos = 2)
+        text(1,.5, labels = game$PTSvis, pos = 2)
+        text(1,1/6, labels = game$PTShome, pos = 2)
+        # pre-game winProbs / correct pick
+        probCol <- 2
+        if(game$homeWinProb > .5 & game$PTShome > game$PTSvis){
+            probCol <- 3
+        }
+        if(game$homeWinProb < .5 & game$PTShome < game$PTSvis){
+            probCol <- 3
+        }
+        text(.9,.5, labels = paste0(format(100*(1-game$homeWinProb), digits = 3, nsmall = 1),'%'), pos = 2, cex = .67, col = probCol)
+            text(.9,1/6, labels = paste0(format(100*(game$homeWinProb), digits = 3, nsmall = 1),'%'), pos = 2, cex = .67, col = probCol)
+    }else{ # game is upcoming
+        # WinProb
+        text(1,5/6, labels = "WinProb", pos = 2)
+        if(!is.na(game$homeWinProb)){
+            text(1,.5, labels = paste0(format(100*(1-game$homeWinProb), digits = 3, nsmall = 1),'%'), pos = 2)
+            text(1,1/6, labels = paste0(format(100*(game$homeWinProb), digits = 3, nsmall = 1),'%'), pos = 2)
+        }
     }
-    text(1,.5, labels = paste0(format(100*(1-game$homeWinProb), digits = 3, nsmall = 1),'%'), pos = 2)
-    text(1,1/6, labels = paste0(format(100*(game$homeWinProb), digits = 3, nsmall = 1),'%'), pos = 2)
 }
 
 ```
@@ -261,4 +278,73 @@ for(i in seq_len(nrow(upcoming))){
 
 ```
 
+
+# Recent Games
+
+
+```{r}
+#| echo: false
+#| message: false
+# get recent games
+recent <- allgames[which(allgames$season == year & !is.na(allgames$PTShome)), ]
+if(nrow(recent) > 6){
+    recent <- recent[(nrow(recent)-5):nrow(recent), ]
+}
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| fig-height: 1.5
+#| fig-width: 8
+#| classes: light-mode
+layout(matrix(1:2, nrow=1))
+
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+for(i in rev(seq_len(nrow(recent)))){
+    game <- recent[i,]
+    plotGame(game, getRecord(game$`Visitor/Neutral`, sched), getRecord(game$`Home/Neutral`, sched))
+}
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| fig-height: 1.5
+#| fig-width: 8
+#| classes: dark-mode
+layout(matrix(1:2, nrow=1))
+
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
+
+for(i in rev(seq_len(nrow(recent)))){
+    game <- recent[i,]
+    plotGame(game, getRecord(game$`Visitor/Neutral`, sched), getRecord(game$`Home/Neutral`, sched))
+}
+
+```
+
+
+# Elo Model Performance
+
+For each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model "picks" whichever team has better than a 50% chance of winning.
+
+```{r}
+#| echo: false
+#| message: false
+games <- allgames[which(allgames$season == year), ]
+
+fwp <- pmax(games$homeWinProb, 1-games$homeWinProb)
+homeTeamFavored <- games$homeWinProb > .5
+homeTeamWon <- games$PTShome > games$PTSvis
+favWon <- homeTeamFavored == homeTeamWon
+winningTeamProb <- 100*ifelse(homeTeamWon, games$homeWinProb, 1-games$homeWinProb)
+pc <- 100*mean(favWon, na.rm = TRUE)
+```
+
+Percent correct: **`{r} format(pc, digits = 4)`%**
+
+Record: **`{r} sum(favWon, na.rm=TRUE)`-`{r} sum(!favWon, na.rm=TRUE)`**
 
