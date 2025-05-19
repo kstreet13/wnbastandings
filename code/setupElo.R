@@ -319,6 +319,8 @@ makeWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     }
     # remove NAs (only relevant for current season)
     curves <- lapply(curves, function(x){ x[!is.na(x$elo), ]})
+    # remove points after "today" (only relevant for current season)
+    curves <- lapply(curves, function(x){ x[x$Date <= today, ]})
     
     # sort by final elo
     curves <- curves[order(sapply(curves, function(x){ x$elo[nrow(x)] }))]
