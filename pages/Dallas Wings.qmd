@@ -1,5 +1,5 @@
 ---
-title: "Indiana Fever"
+title: "Dallas Wings"
 format: 
   html:
     fig-width: 10
@@ -17,7 +17,7 @@ lightbox: true
 source('code/setupStandings.R')
 source('code/setupElo.R')
 
-team <- "Indiana Fever"
+team <- "Dallas Wings"
 abbr1 <- teamcolors$team[teamcolors$name == team]
 abbr2 <- allgames$home_team_abbr[which(allgames$`Home/Neutral` == team)[1]]
 if(is.na(abbr2)){

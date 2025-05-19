@@ -1,119 +1,5 @@
-# combine all games data
-allgames <- NULL
-for(year in 1997:2024){
-    sched <- readRDS(paste0('data/sched',year,'.rds'))
-    # remove unnamed column
-    sched <- sched[,names(sched) != ""]
-    # add Notes column, if missing
-    if(!"Notes" %in% names(sched)){
-        sched$Notes <- ""
-    }
-    sched$season <- year
-    # annotate playoffs
-    sched$playoffs <- FALSE
-    if(any(sched$`Visitor/Neutral` == 'Playoffs')){
-        cut <- which.max(sched$`Visitor/Neutral` == 'Playoffs')
-        sched$playoffs[cut:nrow(sched)] <- TRUE
-        sched <- sched[-cut, ]
-    }
-    allgames <- rbind(allgames, sched)
-}
 
-# add Commissioner's Cup championship games
-CC <- as.data.frame(matrix(c(
-    'Thu, Aug 12, 2021','Connecticut Sun','57','Seattle Storm','79','Neutral site','2021',
-    'Tue, Jul 26, 2022','Las Vegas Aces','93','Chicago Sky','83','','2022',
-    'Tue, Aug 15, 2023','New York Liberty','82','Las Vegas Aces','63','','2023',
-    'Tue, Jun 25, 2024','Minnesota Lynx','94','New York Liberty','89','','2024'
-), ncol = 7, byrow = TRUE))
-CC$playoffs <- TRUE
-names(CC) <- names(allgames)
-allgames <- rbind(allgames, CC)
-rm(CC)
-
-allgames$Date <- as.Date(allgames$Date, format = "%a, %b %d, %Y")
-names(allgames)[3] <- 'PTSvis'
-names(allgames)[5] <- 'PTShome'
-allgames$PTSvis <- as.numeric(allgames$PTSvis)
-allgames$PTShome <- as.numeric(allgames$PTShome)
-allgames$season <- as.numeric(allgames$season)
-teams <- unique(c(allgames$`Visitor/Neutral`, allgames$`Home/Neutral`))
-allgames <- allgames[order(allgames$Date), ]
-allgames$neutral <- FALSE
-allgames$neutral[grep('neutral', tolower(allgames$Notes))] <- TRUE
-allgames$neutral[which(allgames$season == 2020)] <- TRUE # 2020 bubble season
-
-# Abbreviations
-allgames$home_team_abbr <- ""
-allgames$away_team_abbr <- ""
-# Teams and the league were collectively owned by the NBA until the end of 2002
-# [...] This led to two teams moving: [...] Orlando moved to Connecticut
-allgames$home_team_abbr[allgames$`Home/Neutral` %in% c("Orlando Miracle","Connecticut Sun")] <- "CON"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` %in% c("Orlando Miracle","Connecticut Sun")] <- "CON"
-
-# Teams and the league were collectively owned by the NBA until the end of 2002
-# [...] This led to two teams moving: Utah moved to San Antonio [...] in 2018
-# the San Antonio Stars went to Nevada, becoming the Las Vegas Aces.
-allgames$home_team_abbr[allgames$`Home/Neutral` %in% c("Utah Starzz","San Antonio Silver Stars","Las Vegas Aces")] <- "LVA"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` %in% c("Utah Starzz","San Antonio Silver Stars","Las Vegas Aces")] <- "LVA"
-
-# The Detroit Shock was the sister team of the Pistons until the teams' owner
-# sold the Shock to investors who moved the team to Tulsa, Oklahoma. The
-# franchise relocated again in 2016, this time to the Dallas–Fort Worth metro
-# area to become the Dallas Wings.
-allgames$home_team_abbr[allgames$`Home/Neutral` %in% c("Detroit Shock","Tulsa Shock","Dallas Wings")] <- "DAL"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` %in% c("Detroit Shock","Tulsa Shock","Dallas Wings")] <- "DAL"
-
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Atlanta Dream"] <- "ATL"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Atlanta Dream"] <- "ATL"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Charlotte Sting"] <- "CHA"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Charlotte Sting"] <- "CHA"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Chicago Sky"] <- "CHI"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Chicago Sky"] <- "CHI"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Cleveland Rockers"] <- "CLE"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Cleveland Rockers"] <- "CLE"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Houston Comets"] <- "HOU"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Houston Comets"] <- "HOU"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Indiana Fever"] <- "IND"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Indiana Fever"] <- "IND"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Los Angeles Sparks"] <- "LAS"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Los Angeles Sparks"] <- "LAS"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Miami Sol"] <- "MIA"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Miami Sol"] <- "MIA"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Minnesota Lynx"] <- "MIN"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Minnesota Lynx"] <- "MIN"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "New York Liberty"] <- "NYL"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "New York Liberty"] <- "NYL"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Phoenix Mercury"] <- "PHX"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Phoenix Mercury"] <- "PHX"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Portland Fire"] <- "POR"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Portland Fire"] <- "POR"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Sacramento Monarchs"] <- "SAC"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Sacramento Monarchs"] <- "SAC"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Seattle Storm"] <- "SEA"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Seattle Storm"] <- "SEA"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Washington Mystics"] <- "WAS"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Washington Mystics"] <- "WAS"
-allgames$home_team_abbr[allgames$`Home/Neutral` == "Golden State Valkyries"] <- "GSV"
-allgames$away_team_abbr[allgames$`Visitor/Neutral` == "Golden State Valkyries"] <- "GSV"
-
-stopifnot(!any(allgames$home_team_abbr == ""))
-stopifnot(!any(allgames$away_team_abbr == ""))
-
-# add columns for pre- and post-game Elo rating, as well as home team win prob.
-allgames$away_elo_pre <- allgames$away_elo_post <- allgames$home_elo_pre <- allgames$home_elo_post <- allgames$homeWinProb <- NA
-
-# add columns for home/away game number (for the season)
-allgames$home_gameNo <- sapply(1:nrow(allgames), function(ii){
-    ytd <- allgames[which(allgames$season == allgames$season[ii] & allgames$Date < allgames$Date[ii] &
-                              (allgames$away_team_abbr == allgames$home_team_abbr[ii] | allgames$home_team_abbr == allgames$home_team_abbr[ii])), ]
-    return(nrow(ytd)+1)
-})
-allgames$away_gameNo <- sapply(1:nrow(allgames), function(ii){
-    ytd <- allgames[which(allgames$season == allgames$season[ii] & allgames$Date < allgames$Date[ii] &
-                              (allgames$away_team_abbr == allgames$away_team_abbr[ii] | allgames$home_team_abbr == allgames$away_team_abbr[ii])), ]
-    return(nrow(ytd)+1)
-})
+allgames <- readRDS('data/allgames97_24.rds')
 
 adjEloDiff <- function(awayElo, homeElo, neutral, playoff){
     # tried 75, 80 was better
@@ -214,37 +100,6 @@ awayEloShift <- function(game){
     return(K * MoVmult * pregameFavMult)
 }
 
-for(season in 1997:2024){
-    for(gi in 1:sum(allgames$season == season)){
-        idx <- which(allgames$season == season)[gi]
-        game <- allgames[idx,]
-        
-        # search for previous Elo ratings
-        game$away_elo_pre <- prevElo(game$away_team_abbr, game$Date, game$season)
-        game$home_elo_pre <- prevElo(game$home_team_abbr, game$Date, game$season)
-        
-        # calculate win prob
-        game$homeWinProb <- homeWinProb(game)
-        
-        # calculate update
-        hshift <- homeEloShift(game)
-        if(game$PTShome > game$PTSvis) stopifnot(hshift > 0)
-        ashift <- awayEloShift(game)
-        if(game$PTShome < game$PTSvis) stopifnot(ashift > 0)
-        if(game$home_gameNo==game$away_gameNo){
-            stopifnot(round(hshift, digits = 4) == round(-ashift, digits = 4))
-        }
-        # update
-        game$away_elo_post <- game$away_elo_pre + ashift
-        game$home_elo_post <- game$home_elo_pre + hshift
-        allgames[idx,] <- game
-    }
-}
-
-rm(game,sched)
-
-
-
 # single-year plot, similar to standings
 makeWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     mode <- match.arg(mode)
@@ -304,6 +159,8 @@ makeWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     if(today > max(games$Date)){
         today <- max(games$Date)
     }
+    # remove NAs (only relevant for current season)
+    curves <- lapply(curves, function(x){ x[!is.na(x$elo), ]})
     for(i in seq_along(curves)){
         curve <- curves[[i]]
         if(! today %in% curve$Date){
@@ -317,8 +174,6 @@ makeWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
         curve <- curve[order(curve$Date), ]
         curves[[i]] <- curve
     }
-    # remove NAs (only relevant for current season)
-    curves <- lapply(curves, function(x){ x[!is.na(x$elo), ]})
     # remove points after "today" (only relevant for current season)
     curves <- lapply(curves, function(x){ x[x$Date <= today, ]})
     
@@ -372,7 +227,7 @@ makeWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
 }
 
 # single-year plot with one team highlighted, for team histories
-makeWNBAeloHiliteGraph <- function(year, allgames, mode = c('light','dark')){
+makeWNBAeloHiliteGraph <- function(year, team, teamnames, allgames, mode = c('light','dark')){
     mode <- match.arg(mode)
     
     games <- allgames[which(allgames$season == year), ]
@@ -439,13 +294,11 @@ makeWNBAeloHiliteGraph <- function(year, allgames, mode = c('light','dark')){
         curve <- curve[order(curve$Date), ]
         curves[[i]] <- curve
     }
-    # sort by final elo
-    curves <- curves[order(sapply(curves, function(x){ x$elo[nrow(x)] }))]
     teamdata <- teamcolors[match(names(curves), teamcolors$name), ]
     teamdata$elo <- sapply(curves, function(x){ x$elo[nrow(x)] })
     # all(names(curves) == teamdata$name) # check
     
-    par(cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+    par(cex.lab = 1.25, cex.main = 1.5, bg = '#fffaf6')
     if(mode == 'dark'){
         par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
     }
@@ -453,19 +306,43 @@ makeWNBAeloHiliteGraph <- function(year, allgames, mode = c('light','dark')){
     require(scales)
     xl <- range(do.call(rbind, curves)$Date)
     yl <- range(c(allgames$home_elo_post, allgames$away_elo_post))
-    plot(xl, yl, col = 'transparent',
-         xlab = '', ylab='', main = year, las = 1)
-    rect(finale, -9999, finale+10000, 9999, col = alpha(par()$fg, alpha = .15), border = NA)
-    abline(h = 1500, lty = 2)
+    if(team %in% teamdata$name){ # active
+        active <- TRUE
+        yearcol <- par('fg')
+    }else{
+        active <- FALSE
+        yearcol <- alpha(par('fg'), alpha=.4)
+    }
+    plot(xl, yl, col = 'transparent', axes = FALSE,
+         xlab = '', ylab='', main = year, las = 1, col.main = yearcol)
+    abline(h = 1500, lty = 2, col = yearcol)
     
-    #rect(min(sched$Date)-9999,-9999,max(sched$Date)+9999,9999, col='grey95')
     for(i in 1:length(curves)){
         #points(curves[[i]]$Date, curves[[i]]$elo, col=cc[2], pch=16, cex=.5)
         #lines(curves[[i]]$Date, curves[[i]]$elo, col=cc[2], lwd=4)
-        lines(curves[[i]]$Date, curves[[i]]$elo, col='grey50', lwd=2)
+        lines(curves[[i]]$Date, curves[[i]]$elo, col=alpha(par("fg"), alpha = .3), lwd=2)
     }
-    cc <- as.character(teamdata[teamdata$name == team, ][,c('color1','color2')])
-    curve <- curves[[team]]
-    lines(curve$Date, curve$elo, col=cc[1], lwd=4)
-    lines(curve$Date, curve$elo, col=cc[2], lwd=1)
+    for(team in teamnames){
+        if(team %in% teamdata$name){
+            cc <- as.character(teamdata[teamdata$name == team, ][,c('color1','color2')])
+            curve <- curves[[team]]
+            if(active){
+                lines(curve$Date, curve$elo, col=cc[1], lwd=4)
+                lines(curve$Date, curve$elo, col=cc[2], lwd=1)
+            }else{
+                lines(curve$Date, curve$elo, col=alpha(cc[1], alpha=.6), lwd=3)
+            }
+            # check if team won championship
+            lastgame <- allgames[which(allgames$season == year), ]
+            lastgame <- lastgame[which.max(lastgame$Date), ]
+            champ <- ifelse(lastgame$PTShome > lastgame$PTSvis, lastgame$`Home/Neutral`, lastgame$`Visitor/Neutral`)
+            if(team == champ){
+                if(active){
+                    points(curve$Date[nrow(curve)], curve$elo[nrow(curve)], pch = 21, bg='gold2', cex=1.75)
+                }else{
+                    points(curve$Date[nrow(curve)], curve$elo[nrow(curve)], pch = 21, bg=alpha('gold2', alpha = .6), cex=1.75)
+                }
+            }
+        }
+    }
 }

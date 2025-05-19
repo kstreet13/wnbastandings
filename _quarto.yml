@@ -71,6 +71,57 @@ website:
             href: pages/1998.qmd
           - text: "1997"
             href: pages/1997.qmd
+      - section: "Team Histories"
+        contents:
+          - text: "Atlanta Dream"
+            href: pages/Atlanta Dream.qmd
+          - text: "Chicago Sky"
+            href: pages/Chicago Sky.qmd
+          - text: "Connecticut Sun"
+            href: pages/Connecticut Sun.qmd
+          - text: "Dallas Wings"
+            href: pages/Dallas Wings.qmd
+          - text: "Golden State Valkyries"    
+          - text: "Indiana Fever"
+            href: pages/Indiana Fever.qmd
+          - text: "Las Vegas Aces"
+            href: pages/Las Vegas Aces.qmd
+          - text: "Los Angeles Sparks"
+            href: pages/Los Angeles Sparks.qmd
+          - text: "Minnesota Lynx"
+            href: pages/Minnesota Lynx.qmd
+          - text: "New York Liberty"
+            href: pages/New York Liberty.qmd
+          - text: "Phoenix Mercury"
+            href: pages/Phoenix Mercury.qmd
+          - text: "Seattle Storm"
+            href: pages/Seattle Storm.qmd
+          - text: "Washington Mystics"
+            href: pages/Washington Mystics.qmd
+          - section: "Past Teams"
+            contents:
+              - text: "Charlotte Sting"
+                href: pages/Charlotte Sting.qmd
+              - text: "Cleveland Rockers"
+                href: pages/Cleveland Rockers.qmd
+              - text: "Detroit Shock"
+                href: pages/Detroit Shock.qmd
+              - text: "Houston Comets"
+                href: pages/Houston Comets.qmd
+              - text: "Miami Sol"
+                href: pages/Miami Sol.qmd
+              - text: "Orlando Miracle"
+                href: pages/Orlando Miracle.qmd
+              - text: "Portland Fire"
+                href: pages/Portland Fire.qmd
+              - text: "Sacramento Monarchs"
+                href: pages/Sacramento Monarchs.qmd
+              - text: "San Antonio Silver Stars"
+                href: pages/San Antonio Silver Stars.qmd
+              - text: "Tulsa Shock"
+                href: pages/Tulsa Shock.qmd
+              - text: "Utah Starzz"
+                href: pages/Utah Starzz.qmd
       - text: "About"
         href: about.qmd
 
