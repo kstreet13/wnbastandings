@@ -73,3 +73,28 @@ layout(matrix(1))
 par(mar=c(5,4,4,2)+.1)
 ```
 
+
+```{r}
+#| echo: false
+#| message: false
+#| results: asis
+
+years <- sort(unique(allgames$season))
+champs <- sapply(years, function(yr){
+	lastgame <- allgames[which(allgames$season == yr), ]
+    lastgame <- lastgame[which.max(lastgame$Date), ]
+    champ <- ifelse(lastgame$PTShome > lastgame$PTSvis, lastgame$`Home/Neutral`, lastgame$`Visitor/Neutral`)
+    return(champ)
+})
+if(team %in% champs){
+	cat("### Championships")
+	cat('\n')
+	idx <- which(champs == team)
+	for(ii in idx){
+		cat(paste0(" - [",years[ii],"](",years[ii],".qmd)"))
+    	cat('\n')
+	}
+}
+
+```
+
