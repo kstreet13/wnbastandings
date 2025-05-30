@@ -12,16 +12,16 @@ getStandings <- function(year){
 teamcolors <- read.csv(text = 'team,name,color1,color2
 ATL,Atlanta Dream,#C8102E,#418FDE
 CHI,Chicago Sky,#418FDE,#FFCD00
-CON,Connecticut Sun,#A6192E,#041E42
+CON,Connecticut Sun,#FC4C02,#0C2340
 DAL,Dallas Wings,#0C2340,#C4D600
-IND,Indiana Fever,#041E42,#C8102E
+IND,Indiana Fever,#041E42,#FFCD00
 LVA,Las Vegas Aces,#000000,#8A8D8F
 LAS,Los Angeles Sparks,#702F8A,#FFC72C
 MIN,Minnesota Lynx,#0C2340,#236192
 NYL,New York Liberty,#6ECEB2,#000000
 PHX,Phoenix Mercury,#201747,#CB6015
 SEA,Seattle Storm,#2C5234,#FBE122
-WSH,Washington Mystics,#0C2340,#C8102E
+WSH,Washington Mystics,#C8102E,#0C2340
 GSV,Golden State Valkyries,#AD96DC,#010101
 CHA,Charlotte Sting,#00778B,#280071
 CLE,Cleveland Rockers,#280071,#009FDF
