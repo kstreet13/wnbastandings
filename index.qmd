@@ -342,9 +342,41 @@ homeTeamWon <- games$PTShome > games$PTSvis
 favWon <- homeTeamFavored == homeTeamWon
 winningTeamProb <- 100*ifelse(homeTeamWon, games$homeWinProb, 1-games$homeWinProb)
 pc <- 100*mean(favWon, na.rm = TRUE)
+# find biggest upset
+winProb <- ifelse(games$PTShome > games$PTSvis,
+                  games$homeWinProb, 1-games$homeWinProb)
+upsetIdx <- which.min(winProb)
+upset <- games[upsetIdx, ]
 ```
 
 Percent correct: **`{r} format(pc, digits = 4)`%**
 
 Record: **`{r} sum(favWon, na.rm=TRUE)`-`{r} sum(!favWon, na.rm=TRUE)`**
 
+Biggest upset:
+
+```{r}
+#| echo: false
+#| message: false
+#| fig-height: 1.5
+#| fig-width: 8
+#| classes: light-mode
+layout(matrix(1:2, nrow=1))
+
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+plotGame(upset, getRecord(upset$`Visitor/Neutral`, sched), getRecord(upset$`Home/Neutral`, sched))
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| fig-height: 1.5
+#| fig-width: 8
+#| classes: dark-mode
+layout(matrix(1:2, nrow=1))
+
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
+
+plotGame(upset, getRecord(upset$`Visitor/Neutral`, sched), getRecord(upset$`Home/Neutral`, sched))
+```
