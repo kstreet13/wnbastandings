@@ -346,3 +346,124 @@ makeWNBAeloHiliteGraph <- function(year, team, teamnames, allgames, mode = c('li
         }
     }
 }
+
+# interactive version of the single-year plot, similar to standings
+interactiveWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
+    mode <- match.arg(mode)
+    
+    games <- allgames[which(allgames$season == year), ]
+    
+    eloA <- games[,c('Date','Visitor/Neutral','season','away_team_abbr','away_elo_pre','away_elo_post')]
+    eloH <- games[,c('Date','Home/Neutral','season','home_team_abbr','home_elo_pre','home_elo_post')]
+    names(eloA) <- c('Date','Team_Name','season','team_abbr','elo_pre','elo_post')
+    names(eloH) <- names(eloA)
+    elo <- rbind(eloA, eloH)
+    elo <- elo[order(elo$Date), ]
+    rm(eloA,eloH)
+    
+    teams <- unique(elo$Team_Name)
+    
+    # check
+    stopifnot(all(teams %in% teamcolors$name))
+    # stopifnot(all(teamcolors$name %in% teams)) # teams can be added/removed
+    
+    # QC stuff. missing values, etc.
+    
+    # add initial value
+    opening <- min(elo$Date)
+    for(team in teams){
+        toAdd <- elo[which.max(elo$Team_Name == team), ]
+        toAdd$Date <- opening - 1
+        toAdd$elo_post <- toAdd$elo_pre
+        elo <- rbind(toAdd, elo)
+    }
+    finale <- max(games$Date[which(!games$playoffs)])
+    
+    curves <- lapply(teams, function(team){
+        idx <- which(elo$Team_Name == team)
+        curve <- data.frame(Date = elo$Date[idx],
+                            elo = elo$elo_post[idx])
+        # already added starting value, but want intermediate values, so it's clear when games happen
+        supp <- data.frame(Date = curve$Date-1,
+                           elo = c(0,curve$elo[-nrow(curve)]))
+        supp <- supp[-1, ]
+        supp <- supp[!supp$Date %in% curve$Date, ]
+        curve <- rbind(supp,curve)
+        curve <- curve[order(curve$Date), ]
+        # curve <- curve[!is.na(curve$margin), ] # only count played games
+        # if(is.na(curve$WL[nrow(curve)])){
+        #     curve <- curve[-nrow(curve), ]
+        # }
+        # 
+        return(curve)
+    })
+    names(curves) <- teams
+    
+    
+    # make sure curves start the day before opening day and don't end before the current date
+    today <- Sys.Date() - 1 # it's actually yesterday, because this is set to run in the early morning
+    # don't extend past the end of the season
+    if(today > max(games$Date)){
+        today <- max(games$Date)
+    }
+    # remove NAs (only relevant for current season)
+    curves <- lapply(curves, function(x){ x[!is.na(x$elo), ]})
+    for(i in seq_along(curves)){
+        curve <- curves[[i]]
+        if(! today %in% curve$Date){
+            # make sure "today" is after opening day.
+            # stop extending lines when regular season ends, only playoff teams should continue
+            if(today > opening & today <= finale){
+                toAdd <- data.frame(Date = today, elo = curve$elo[nrow(curve)])
+                curve <- rbind(curve, toAdd)
+            }
+        }
+        curve <- curve[order(curve$Date), ]
+        curves[[i]] <- curve
+    }
+    # remove points after "today" (only relevant for current season)
+    curves <- lapply(curves, function(x){ x[x$Date <= today, ]})
+    
+    # sort by final elo
+    curves <- curves[order(sapply(curves, function(x){ x$elo[nrow(x)] }))]
+    teamdata <- teamcolors[match(names(curves), teamcolors$name), ]
+    teamdata$elo <- sapply(curves, function(x){ x$elo[nrow(x)] })
+    # all(names(curves) == teamdata$name) # check
+    
+    # build legend df
+    lgnd <- teamdata[nrow(teamdata):1, ]
+    lgnd$nameElo <- paste0(lgnd$name,' (',round(lgnd$elo),')')
+    
+    for(i in 1:length(curves)){
+        curves[[i]]$team <- names(curves)[i]
+    }
+    df <- do.call(rbind, curves)
+    
+    require(plotly)
+    
+    # teams need to be a factor sorted by final Elo
+    df$team <- factor(df$team, levels = rev(names(curves)))
+    df$abbr <- teamcolors$team[match(df$team, teamcolors$name)]
+    
+    cv <- teamcolors[teamcolors$name %in% df$team, ]
+    cv <- cv$distinct[match(rev(names(curves)), cv$name)]
+    
+    vline <- function(x = 0, color = 1, width = 1) {
+        list(
+            type = "line", 
+            y0 = 0, 
+            y1 = 1, 
+            yref = "paper",
+            x0 = x, 
+            x1 = x, 
+            line = list(color = color, width = width)
+        )
+    }
+    
+    plot_ly(df, x=~Date, y=~elo, color = ~team, type = 'scatter', mode='lines', colors = cv, 
+            line = list(width = 3), hoverinfo = 'text',
+            text = ~paste(abbr, Date, round(elo))) |> 
+        layout(legend = list(x = 100, y = 0.5), hovermode = 'x',
+               shapes = list(vline(x = finale, width = .5)),
+               yaxis = list(title = 'Elo Rating'))
+}

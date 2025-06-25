@@ -35,6 +35,19 @@ SAS,San Antonio Silver Stars,#010101,#8D9093
 TUL,Tulsa Shock,#FFB81C,#010101
 UTA,Utah Starzz,#006271,#753BBD')
 
+teamcolors$distinct <- teamcolors$color1
+teamcolors$distinct[teamcolors$name=='Seattle Storm'] <- '#78BE21'
+teamcolors$distinct[teamcolors$name=='Minnesota Lynx'] <- '#236192'
+teamcolors$distinct[teamcolors$name=='Dallas Wings'] <- '#C4D600'
+teamcolors$distinct[teamcolors$name=='Indiana Fever'] <- '#FFCD00'
+teamcolors$distinct[teamcolors$name=='Phoenix Mercury'] <- '#CB6015'
+teamcolors$distinct[teamcolors$name=='Washington Mystics'] <- '#8A8D8F'
+
+# grid <- cbind(rep(1:6,each=4), rep(1:4, times=6))
+# ord <- sample(nrow(teamcolors))
+# plot(grid, pch=16, col = teamcolors$distinct[ord])
+# text(grid, labels = teamcolors$team[ord], col = teamcolors$distinct[ord])
+
 makeWNBAstandingsGraph <- function(year, sched, mode = c('light','dark')){
     mode <- match.arg(mode)
     
