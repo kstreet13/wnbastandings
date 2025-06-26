@@ -1,194 +1,5 @@
 [
   {
-    "objectID": "pages/Indiana Fever.html",
-    "href": "pages/Indiana Fever.html",
-    "title": "Indiana Fever",
-    "section": "",
-    "text": "Franchise History\n\nIndiana Fever (2000 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2012",
-    "crumbs": [
-      "Team Histories",
-      "Indiana Fever"
-    ]
-  },
-  {
-    "objectID": "pages/Miami Sol.html",
-    "href": "pages/Miami Sol.html",
-    "title": "Miami Sol",
-    "section": "",
-    "text": "Franchise History\n\nMiami Sol (2000 - 2002)",
-    "crumbs": [
-      "Team Histories",
-      "Past Teams",
-      "Miami Sol"
-    ]
-  },
-  {
-    "objectID": "pages/Orlando Miracle.html",
-    "href": "pages/Orlando Miracle.html",
-    "title": "Orlando Miracle",
-    "section": "",
-    "text": "Franchise History\n\nOrlando Miracle (1999 - 2002)\nConnecticut Sun (2003 - Present)",
-    "crumbs": [
-      "Team Histories",
-      "Past Teams",
-      "Orlando Miracle"
-    ]
-  },
-  {
-    "objectID": "pages/2010.html",
-    "href": "pages/2010.html",
-    "title": "2010 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 66.82%\nRecord: 147-73\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2010"
-    ]
-  },
-  {
-    "objectID": "pages/Los Angeles Sparks.html",
-    "href": "pages/Los Angeles Sparks.html",
-    "title": "Los Angeles Sparks",
-    "section": "",
-    "text": "Franchise History\n\nLos Angeles Sparks (1997 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2001\n2002\n2016",
-    "crumbs": [
-      "Team Histories",
-      "Los Angeles Sparks"
-    ]
-  },
-  {
-    "objectID": "pages/1997.html",
-    "href": "pages/1997.html",
-    "title": "1997 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 60.87%\nRecord: 70-45\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "1997"
-    ]
-  },
-  {
-    "objectID": "pages/2012.html",
-    "href": "pages/2012.html",
-    "title": "2012 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 71.75%\nRecord: 160-63\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2012"
-    ]
-  },
-  {
-    "objectID": "pages/2022.html",
-    "href": "pages/2022.html",
-    "title": "2022 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 62.92%\nRecord: 151-89\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2022"
-    ]
-  },
-  {
-    "objectID": "pages/2021.html",
-    "href": "pages/2021.html",
-    "title": "2021 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 66.19%\nRecord: 139-71\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2021"
-    ]
-  },
-  {
-    "objectID": "pages/2024.html",
-    "href": "pages/2024.html",
-    "title": "2024 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 66.16%\nRecord: 174-89\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2024"
-    ]
-  },
-  {
-    "objectID": "pages/2000.html",
-    "href": "pages/2000.html",
-    "title": "2000 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 72.43%\nRecord: 197-75\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2000"
-    ]
-  },
-  {
-    "objectID": "pages/2007.html",
-    "href": "pages/2007.html",
-    "title": "2007 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 60.33%\nRecord: 146-96\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2007"
-    ]
-  },
-  {
-    "objectID": "pages/2009.html",
-    "href": "pages/2009.html",
-    "title": "2009 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 59.09%\nRecord: 143-99\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2009"
-    ]
-  },
-  {
-    "objectID": "pages/2005.html",
-    "href": "pages/2005.html",
-    "title": "2005 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 68.91%\nRecord: 164-74\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2005"
-    ]
-  },
-  {
-    "objectID": "pages/Dallas Wings.html",
-    "href": "pages/Dallas Wings.html",
-    "title": "Dallas Wings",
-    "section": "",
-    "text": "Franchise History\n\nDetroit Shock (1998 - 2009)\nTulsa Shock (2010 - 2015)\nDallas Wings (2016 - Present)",
-    "crumbs": [
-      "Team Histories",
-      "Dallas Wings"
-    ]
-  },
-  {
-    "objectID": "pages/2015.html",
-    "href": "pages/2015.html",
-    "title": "2015 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 66.67%\nRecord: 150-75\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2015"
-    ]
-  },
-  {
-    "objectID": "pages/1999.html",
-    "href": "pages/1999.html",
-    "title": "1999 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 62.07%\nRecord: 126-77\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "1999"
-    ]
-  },
-  {
     "objectID": "pages/Phoenix Mercury.html",
     "href": "pages/Phoenix Mercury.html",
     "title": "Phoenix Mercury",
@@ -197,149 +8,6 @@
     "crumbs": [
       "Team Histories",
       "Phoenix Mercury"
-    ]
-  },
-  {
-    "objectID": "pages/Chicago Sky.html",
-    "href": "pages/Chicago Sky.html",
-    "title": "Chicago Sky",
-    "section": "",
-    "text": "Franchise History\n\nChicago Sky (2006 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2021",
-    "crumbs": [
-      "Team Histories",
-      "Chicago Sky"
-    ]
-  },
-  {
-    "objectID": "pages/2018.html",
-    "href": "pages/2018.html",
-    "title": "2018 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 64.71%\nRecord: 143-78\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2018"
-    ]
-  },
-  {
-    "objectID": "pages/New York Liberty.html",
-    "href": "pages/New York Liberty.html",
-    "title": "New York Liberty",
-    "section": "",
-    "text": "Franchise History\n\nNew York Liberty (1997 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2024",
-    "crumbs": [
-      "Team Histories",
-      "New York Liberty"
-    ]
-  },
-  {
-    "objectID": "pages/2001.html",
-    "href": "pages/2001.html",
-    "title": "2001 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 63.5%\nRecord: 174-100\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2001"
-    ]
-  },
-  {
-    "objectID": "pages/Washington Mystics.html",
-    "href": "pages/Washington Mystics.html",
-    "title": "Washington Mystics",
-    "section": "",
-    "text": "Franchise History\n\nWashington Mystics (1998 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2019",
-    "crumbs": [
-      "Team Histories",
-      "Washington Mystics"
-    ]
-  },
-  {
-    "objectID": "pages/2011.html",
-    "href": "pages/2011.html",
-    "title": "2011 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 69.06%\nRecord: 154-69\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2011"
-    ]
-  },
-  {
-    "objectID": "pages/2019.html",
-    "href": "pages/2019.html",
-    "title": "2019 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 66.82%\nRecord: 147-73\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2019"
-    ]
-  },
-  {
-    "objectID": "pages/Houston Comets.html",
-    "href": "pages/Houston Comets.html",
-    "title": "Houston Comets",
-    "section": "",
-    "text": "Franchise History\n\nHouston Comets (1997 - 2008)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n1997\n1998\n1999\n2000",
-    "crumbs": [
-      "Team Histories",
-      "Past Teams",
-      "Houston Comets"
-    ]
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "Standings graphs were inspired by Greg Stoll’s MLB Division Race Charts.\nElo ratings were inspired by fivethirtyeight.com (RIP) and based on the system described here, with only minor adjustments.\nAll statistics are from the amazing Basketball Reference.\nWNBA team colors were identified by Team Color Codes and TruColor.\nSpecial thanks to Lisa DeBruine for the great demo on using light/dark modes in Quarto.",
-    "crumbs": [
-      "About"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "2025 WNBA Standings",
-    "section": "",
-    "text": "About these plots\nStandings plots show how many games above or below .500 each team was throughout the course of the season. Ties are broken arbitrarily, as I didn’t actually code up the tie-breaker scenarios.\nElo ratings are a way of estimating a team’s “true” skill level, invented by Arpad Elo to rank chess players (Wikipedia). The rating system used here was adapted from the WNBA ratings system implemented by fivethirtyeight.com. Ratings are partially carried over from year to year, which is why the lines have different starting values. The long-run average rating is 1500.\n\n\nUpcoming Games\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nRecent Games\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nElo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 63.44%\nRecord: 59-34\nBiggest upset:",
-    "crumbs": [
-      "Current Year"
-    ]
-  },
-  {
-    "objectID": "pages/2016.html",
-    "href": "pages/2016.html",
-    "title": "2016 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 61.36%\nRecord: 135-85\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2016"
-    ]
-  },
-  {
-    "objectID": "pages/San Antonio Silver Stars.html",
-    "href": "pages/San Antonio Silver Stars.html",
-    "title": "San Antonio Silver Stars",
-    "section": "",
-    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - Present)",
-    "crumbs": [
-      "Team Histories",
-      "Past Teams",
-      "San Antonio Silver Stars"
-    ]
-  },
-  {
-    "objectID": "pages/Atlanta Dream.html",
-    "href": "pages/Atlanta Dream.html",
-    "title": "Atlanta Dream",
-    "section": "",
-    "text": "Franchise History\n\nAtlanta Dream (2008 - Present)",
-    "crumbs": [
-      "Team Histories",
-      "Atlanta Dream"
     ]
   },
   {
@@ -354,60 +22,36 @@
     ]
   },
   {
-    "objectID": "pages/Detroit Shock.html",
-    "href": "pages/Detroit Shock.html",
-    "title": "Detroit Shock",
+    "objectID": "pages/2001.html",
+    "href": "pages/2001.html",
+    "title": "2001 WNBA Results",
     "section": "",
-    "text": "Franchise History\n\nDetroit Shock (1998 - 2009)\nTulsa Shock (2010 - 2015)\nDallas Wings (2016 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2003\n2006\n2008",
-    "crumbs": [
-      "Team Histories",
-      "Past Teams",
-      "Detroit Shock"
-    ]
-  },
-  {
-    "objectID": "pages/1998.html",
-    "href": "pages/1998.html",
-    "title": "1998 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 72.78%\nRecord: 115-43\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 63.5%\nRecord: 174-100\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
     "crumbs": [
       "Past Years",
-      "1998"
+      "2001"
     ]
   },
   {
-    "objectID": "pages/Minnesota Lynx.html",
-    "href": "pages/Minnesota Lynx.html",
-    "title": "Minnesota Lynx",
+    "objectID": "pages/2021.html",
+    "href": "pages/2021.html",
+    "title": "2021 WNBA Results",
     "section": "",
-    "text": "Franchise History\n\nMinnesota Lynx (1999 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2011\n2013\n2015\n2017",
-    "crumbs": [
-      "Team Histories",
-      "Minnesota Lynx"
-    ]
-  },
-  {
-    "objectID": "pages/Utah Starzz.html",
-    "href": "pages/Utah Starzz.html",
-    "title": "Utah Starzz",
-    "section": "",
-    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - Present)",
-    "crumbs": [
-      "Team Histories",
-      "Past Teams",
-      "Utah Starzz"
-    ]
-  },
-  {
-    "objectID": "pages/2006.html",
-    "href": "pages/2006.html",
-    "title": "2006 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 68.48%\nRecord: 176-81\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 66.19%\nRecord: 139-71\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
     "crumbs": [
       "Past Years",
-      "2006"
+      "2021"
+    ]
+  },
+  {
+    "objectID": "pages/Atlanta Dream.html",
+    "href": "pages/Atlanta Dream.html",
+    "title": "Atlanta Dream",
+    "section": "",
+    "text": "Franchise History\n\nAtlanta Dream (2008 - Present)",
+    "crumbs": [
+      "Team Histories",
+      "Atlanta Dream"
     ]
   },
   {
@@ -423,25 +67,25 @@
     ]
   },
   {
-    "objectID": "pages/2023.html",
-    "href": "pages/2023.html",
-    "title": "2023 WNBA Results",
+    "objectID": "pages/1998.html",
+    "href": "pages/1998.html",
+    "title": "1998 WNBA Results",
     "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 63.98%\nRecord: 167-94\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 72.78%\nRecord: 115-43\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
     "crumbs": [
       "Past Years",
-      "2023"
+      "1998"
     ]
   },
   {
-    "objectID": "pages/Connecticut Sun.html",
-    "href": "pages/Connecticut Sun.html",
-    "title": "Connecticut Sun",
+    "objectID": "pages/2018.html",
+    "href": "pages/2018.html",
+    "title": "2018 WNBA Results",
     "section": "",
-    "text": "Franchise History\n\nOrlando Miracle (1999 - 2002)\nConnecticut Sun (2003 - Present)",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 64.71%\nRecord: 143-78\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
     "crumbs": [
-      "Team Histories",
-      "Connecticut Sun"
+      "Past Years",
+      "2018"
     ]
   },
   {
@@ -453,50 +97,6 @@
     "crumbs": [
       "Past Years",
       "2008"
-    ]
-  },
-  {
-    "objectID": "pages/2002.html",
-    "href": "pages/2002.html",
-    "title": "2002 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 63.37%\nRecord: 173-100\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2002"
-    ]
-  },
-  {
-    "objectID": "pages/2014.html",
-    "href": "pages/2014.html",
-    "title": "2014 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 59.91%\nRecord: 133-89\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2014"
-    ]
-  },
-  {
-    "objectID": "pages/2013.html",
-    "href": "pages/2013.html",
-    "title": "2013 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 64.71%\nRecord: 143-78\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2013"
-    ]
-  },
-  {
-    "objectID": "pages/2003.html",
-    "href": "pages/2003.html",
-    "title": "2003 WNBA Results",
-    "section": "",
-    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 68.87%\nRecord: 177-80\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
-    "crumbs": [
-      "Past Years",
-      "2003"
     ]
   },
   {
@@ -512,26 +112,222 @@
     ]
   },
   {
-    "objectID": "pages/Seattle Storm.html",
-    "href": "pages/Seattle Storm.html",
-    "title": "Seattle Storm",
+    "objectID": "pages/2014.html",
+    "href": "pages/2014.html",
+    "title": "2014 WNBA Results",
     "section": "",
-    "text": "Franchise History\n\nSeattle Storm (2000 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2004\n2010\n2018\n2020",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 59.91%\nRecord: 133-89\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
     "crumbs": [
-      "Team Histories",
-      "Seattle Storm"
+      "Past Years",
+      "2014"
     ]
   },
   {
-    "objectID": "pages/Sacramento Monarchs.html",
-    "href": "pages/Sacramento Monarchs.html",
-    "title": "Sacramento Monarchs",
+    "objectID": "pages/2024.html",
+    "href": "pages/2024.html",
+    "title": "2024 WNBA Results",
     "section": "",
-    "text": "Franchise History\n\nSacramento Monarchs (1997 - 2009)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2005",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 66.16%\nRecord: 174-89\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2024"
+    ]
+  },
+  {
+    "objectID": "pages/Indiana Fever.html",
+    "href": "pages/Indiana Fever.html",
+    "title": "Indiana Fever",
+    "section": "",
+    "text": "Franchise History\n\nIndiana Fever (2000 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2012",
+    "crumbs": [
+      "Team Histories",
+      "Indiana Fever"
+    ]
+  },
+  {
+    "objectID": "pages/New York Liberty.html",
+    "href": "pages/New York Liberty.html",
+    "title": "New York Liberty",
+    "section": "",
+    "text": "Franchise History\n\nNew York Liberty (1997 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2024",
+    "crumbs": [
+      "Team Histories",
+      "New York Liberty"
+    ]
+  },
+  {
+    "objectID": "pages/Detroit Shock.html",
+    "href": "pages/Detroit Shock.html",
+    "title": "Detroit Shock",
+    "section": "",
+    "text": "Franchise History\n\nDetroit Shock (1998 - 2009)\nTulsa Shock (2010 - 2015)\nDallas Wings (2016 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2003\n2006\n2008",
     "crumbs": [
       "Team Histories",
       "Past Teams",
-      "Sacramento Monarchs"
+      "Detroit Shock"
+    ]
+  },
+  {
+    "objectID": "pages/2023.html",
+    "href": "pages/2023.html",
+    "title": "2023 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 63.98%\nRecord: 167-94\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2023"
+    ]
+  },
+  {
+    "objectID": "pages/2019.html",
+    "href": "pages/2019.html",
+    "title": "2019 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 66.82%\nRecord: 147-73\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2019"
+    ]
+  },
+  {
+    "objectID": "pages/2009.html",
+    "href": "pages/2009.html",
+    "title": "2009 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 59.09%\nRecord: 143-99\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2009"
+    ]
+  },
+  {
+    "objectID": "pages/2013.html",
+    "href": "pages/2013.html",
+    "title": "2013 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 64.71%\nRecord: 143-78\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2013"
+    ]
+  },
+  {
+    "objectID": "pages/2016.html",
+    "href": "pages/2016.html",
+    "title": "2016 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 61.36%\nRecord: 135-85\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2016"
+    ]
+  },
+  {
+    "objectID": "pages/2007.html",
+    "href": "pages/2007.html",
+    "title": "2007 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 60.33%\nRecord: 146-96\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2007"
+    ]
+  },
+  {
+    "objectID": "pages/1997.html",
+    "href": "pages/1997.html",
+    "title": "1997 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 60.87%\nRecord: 70-45\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "1997"
+    ]
+  },
+  {
+    "objectID": "pages/1999.html",
+    "href": "pages/1999.html",
+    "title": "1999 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 62.07%\nRecord: 126-77\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "1999"
+    ]
+  },
+  {
+    "objectID": "pages/2022.html",
+    "href": "pages/2022.html",
+    "title": "2022 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 62.92%\nRecord: 151-89\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2022"
+    ]
+  },
+  {
+    "objectID": "pages/Washington Mystics.html",
+    "href": "pages/Washington Mystics.html",
+    "title": "Washington Mystics",
+    "section": "",
+    "text": "Franchise History\n\nWashington Mystics (1998 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2019",
+    "crumbs": [
+      "Team Histories",
+      "Washington Mystics"
+    ]
+  },
+  {
+    "objectID": "pages/2010.html",
+    "href": "pages/2010.html",
+    "title": "2010 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 66.82%\nRecord: 147-73\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2010"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "2025 WNBA Standings",
+    "section": "",
+    "text": "About these plots\nStandings plots show how many games above or below .500 each team was throughout the course of the season. Ties are broken arbitrarily, as I didn’t actually code up the tie-breaker scenarios.\nElo ratings are a way of estimating a team’s “true” skill level, invented by Arpad Elo to rank chess players (Wikipedia). The rating system used here was adapted from the WNBA ratings system implemented by fivethirtyeight.com. Ratings are partially carried over from year to year, which is why the lines have different starting values. The long-run average rating is 1500.\n\n\nUpcoming Games\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nRecent Games\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nElo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 64.21%\nRecord: 61-34\nBiggest upset:",
+    "crumbs": [
+      "Current Year"
+    ]
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Standings graphs were inspired by Greg Stoll’s MLB Division Race Charts.\nElo ratings were inspired by fivethirtyeight.com (RIP) and based on the system described here, with only minor adjustments.\nAll statistics are from the amazing Basketball Reference.\nWNBA team colors were identified by Team Color Codes and TruColor.\nSpecial thanks to Lisa DeBruine for the great demo on using light/dark modes in Quarto.",
+    "crumbs": [
+      "About"
+    ]
+  },
+  {
+    "objectID": "pages/2003.html",
+    "href": "pages/2003.html",
+    "title": "2003 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 68.87%\nRecord: 177-80\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2003"
+    ]
+  },
+  {
+    "objectID": "pages/2015.html",
+    "href": "pages/2015.html",
+    "title": "2015 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 66.67%\nRecord: 150-75\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2015"
     ]
   },
   {
@@ -543,6 +339,28 @@
     "crumbs": [
       "Past Years",
       "2004"
+    ]
+  },
+  {
+    "objectID": "pages/Connecticut Sun.html",
+    "href": "pages/Connecticut Sun.html",
+    "title": "Connecticut Sun",
+    "section": "",
+    "text": "Franchise History\n\nOrlando Miracle (1999 - 2002)\nConnecticut Sun (2003 - Present)",
+    "crumbs": [
+      "Team Histories",
+      "Connecticut Sun"
+    ]
+  },
+  {
+    "objectID": "pages/Las Vegas Aces.html",
+    "href": "pages/Las Vegas Aces.html",
+    "title": "Las Vegas Aces",
+    "section": "",
+    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2022\n2023",
+    "crumbs": [
+      "Team Histories",
+      "Las Vegas Aces"
     ]
   },
   {
@@ -558,14 +376,83 @@
     ]
   },
   {
-    "objectID": "pages/Las Vegas Aces.html",
-    "href": "pages/Las Vegas Aces.html",
-    "title": "Las Vegas Aces",
+    "objectID": "pages/Minnesota Lynx.html",
+    "href": "pages/Minnesota Lynx.html",
+    "title": "Minnesota Lynx",
     "section": "",
-    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2022\n2023",
+    "text": "Franchise History\n\nMinnesota Lynx (1999 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2011\n2013\n2015\n2017",
     "crumbs": [
       "Team Histories",
-      "Las Vegas Aces"
+      "Minnesota Lynx"
+    ]
+  },
+  {
+    "objectID": "pages/2005.html",
+    "href": "pages/2005.html",
+    "title": "2005 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 68.91%\nRecord: 164-74\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2005"
+    ]
+  },
+  {
+    "objectID": "pages/Utah Starzz.html",
+    "href": "pages/Utah Starzz.html",
+    "title": "Utah Starzz",
+    "section": "",
+    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - Present)",
+    "crumbs": [
+      "Team Histories",
+      "Past Teams",
+      "Utah Starzz"
+    ]
+  },
+  {
+    "objectID": "pages/Miami Sol.html",
+    "href": "pages/Miami Sol.html",
+    "title": "Miami Sol",
+    "section": "",
+    "text": "Franchise History\n\nMiami Sol (2000 - 2002)",
+    "crumbs": [
+      "Team Histories",
+      "Past Teams",
+      "Miami Sol"
+    ]
+  },
+  {
+    "objectID": "pages/2002.html",
+    "href": "pages/2002.html",
+    "title": "2002 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 63.37%\nRecord: 173-100\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2002"
+    ]
+  },
+  {
+    "objectID": "pages/Orlando Miracle.html",
+    "href": "pages/Orlando Miracle.html",
+    "title": "Orlando Miracle",
+    "section": "",
+    "text": "Franchise History\n\nOrlando Miracle (1999 - 2002)\nConnecticut Sun (2003 - Present)",
+    "crumbs": [
+      "Team Histories",
+      "Past Teams",
+      "Orlando Miracle"
+    ]
+  },
+  {
+    "objectID": "pages/2006.html",
+    "href": "pages/2006.html",
+    "title": "2006 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 68.48%\nRecord: 176-81\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2006"
     ]
   },
   {
@@ -580,6 +467,62 @@
     ]
   },
   {
+    "objectID": "pages/2012.html",
+    "href": "pages/2012.html",
+    "title": "2012 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 71.75%\nRecord: 160-63\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2012"
+    ]
+  },
+  {
+    "objectID": "pages/2000.html",
+    "href": "pages/2000.html",
+    "title": "2000 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 72.43%\nRecord: 197-75\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2000"
+    ]
+  },
+  {
+    "objectID": "pages/Dallas Wings.html",
+    "href": "pages/Dallas Wings.html",
+    "title": "Dallas Wings",
+    "section": "",
+    "text": "Franchise History\n\nDetroit Shock (1998 - 2009)\nTulsa Shock (2010 - 2015)\nDallas Wings (2016 - Present)",
+    "crumbs": [
+      "Team Histories",
+      "Dallas Wings"
+    ]
+  },
+  {
+    "objectID": "pages/Houston Comets.html",
+    "href": "pages/Houston Comets.html",
+    "title": "Houston Comets",
+    "section": "",
+    "text": "Franchise History\n\nHouston Comets (1997 - 2008)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n1997\n1998\n1999\n2000",
+    "crumbs": [
+      "Team Histories",
+      "Past Teams",
+      "Houston Comets"
+    ]
+  },
+  {
+    "objectID": "pages/Chicago Sky.html",
+    "href": "pages/Chicago Sky.html",
+    "title": "Chicago Sky",
+    "section": "",
+    "text": "Franchise History\n\nChicago Sky (2006 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2021",
+    "crumbs": [
+      "Team Histories",
+      "Chicago Sky"
+    ]
+  },
+  {
     "objectID": "pages/Cleveland Rockers.html",
     "href": "pages/Cleveland Rockers.html",
     "title": "Cleveland Rockers",
@@ -589,6 +532,63 @@
       "Team Histories",
       "Past Teams",
       "Cleveland Rockers"
+    ]
+  },
+  {
+    "objectID": "pages/2011.html",
+    "href": "pages/2011.html",
+    "title": "2011 WNBA Results",
+    "section": "",
+    "text": "Elo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 69.06%\nRecord: 154-69\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEven if the Elo model was perfect, it would still get some games wrong due to inherent randomness. The model might correctly identify that a team has a 60% chance of winning, but its “pick” will be wrong 40% of the time. For the blue distribution above, we assume that the probabilities estimated by the model are exactly right and simulate every game according to those probabilities.",
+    "crumbs": [
+      "Past Years",
+      "2011"
+    ]
+  },
+  {
+    "objectID": "pages/Seattle Storm.html",
+    "href": "pages/Seattle Storm.html",
+    "title": "Seattle Storm",
+    "section": "",
+    "text": "Franchise History\n\nSeattle Storm (2000 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2004\n2010\n2018\n2020",
+    "crumbs": [
+      "Team Histories",
+      "Seattle Storm"
+    ]
+  },
+  {
+    "objectID": "pages/Los Angeles Sparks.html",
+    "href": "pages/Los Angeles Sparks.html",
+    "title": "Los Angeles Sparks",
+    "section": "",
+    "text": "Franchise History\n\nLos Angeles Sparks (1997 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2001\n2002\n2016",
+    "crumbs": [
+      "Team Histories",
+      "Los Angeles Sparks"
+    ]
+  },
+  {
+    "objectID": "pages/San Antonio Silver Stars.html",
+    "href": "pages/San Antonio Silver Stars.html",
+    "title": "San Antonio Silver Stars",
+    "section": "",
+    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - Present)",
+    "crumbs": [
+      "Team Histories",
+      "Past Teams",
+      "San Antonio Silver Stars"
+    ]
+  },
+  {
+    "objectID": "pages/Sacramento Monarchs.html",
+    "href": "pages/Sacramento Monarchs.html",
+    "title": "Sacramento Monarchs",
+    "section": "",
+    "text": "Franchise History\n\nSacramento Monarchs (1997 - 2009)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2005",
+    "crumbs": [
+      "Team Histories",
+      "Past Teams",
+      "Sacramento Monarchs"
     ]
   }
 ]
