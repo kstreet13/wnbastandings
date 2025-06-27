@@ -23,6 +23,9 @@ sched <- getSchedule(year)
 # standings <- getStandings(year)
 ```
 
+::: {.panel-tabset}
+## Static
+
 ```{r}
 #| echo: false
 #| message: false
@@ -174,6 +177,36 @@ makeWNBAeloGraph(year, allgames)
 #| message: false
 #| classes: dark-mode
 makeWNBAeloGraph(year, allgames, mode = 'dark')
+```
+
+## Interactive
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
+interactiveWNBAstandingsGraph(year, sched, mode = 'light')
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+interactiveWNBAstandingsGraph(year, sched, mode = 'dark')
+```
+
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
+interactiveWNBAeloGraph(year, allgames, mode = 'light')
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+interactiveWNBAeloGraph(year, allgames, mode = 'dark')
 ```
 
 

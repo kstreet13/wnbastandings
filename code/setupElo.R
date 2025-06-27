@@ -430,10 +430,6 @@ interactiveWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     teamdata$elo <- sapply(curves, function(x){ x$elo[nrow(x)] })
     # all(names(curves) == teamdata$name) # check
     
-    # build legend df
-    lgnd <- teamdata[nrow(teamdata):1, ]
-    lgnd$nameElo <- paste0(lgnd$name,' (',round(lgnd$elo),')')
-    
     for(i in 1:length(curves)){
         curves[[i]]$team <- names(curves)[i]
     }
@@ -448,6 +444,7 @@ interactiveWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     cv <- teamcolors[teamcolors$name %in% df$team, ]
     cv <- cv$distinct[match(rev(names(curves)), cv$name)]
     
+    # helper function for drawing vertical line
     vline <- function(x = 0, color = 1, width = 1) {
         list(
             type = "line", 
@@ -460,10 +457,20 @@ interactiveWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
         )
     }
     
-    plot_ly(df, x=~Date, y=~elo, color = ~team, type = 'scatter', mode='lines', colors = cv, 
+    fig <- plot_ly(df, x=~Date, y=~elo, color = ~team, type = 'scatter', mode='lines', colors = cv, 
             line = list(width = 3), hoverinfo = 'text',
             text = ~paste(abbr, Date, round(elo))) |> 
         layout(legend = list(x = 100, y = 0.5), hovermode = 'x',
-               shapes = list(vline(x = finale, width = .5)),
                yaxis = list(title = 'Elo Rating'))
+    
+    if(mode == 'light'){
+        fig <- fig |> layout(plot_bgcolor = '#fffaf6', paper_bgcolor = '#fffaf6')
+    }else{
+        fig <- fig |> layout(plot_bgcolor = '#272935', paper_bgcolor = '#272935',
+                             font = list(color = '#FFFFFF'))
+    }
+    if(today >= finale){
+        fig <- fig |> layout(shapes = list(vline(x = finale, width = .5)))
+    }
+    fig
 }

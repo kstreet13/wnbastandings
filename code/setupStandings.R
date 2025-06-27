@@ -188,3 +188,120 @@ makeWNBAstandingsGraph <- function(year, sched, mode = c('light','dark')){
            bty='n', lwd=1.1, col = lgnd$color2, cex = 1.3)
     
 }
+
+interactiveWNBAstandingsGraph <- function(year, sched, mode = c('light','dark')){
+    mode <- match.arg(mode)
+    
+    sched <- sched[,1:5]
+    # date could be in two formats, with or without commas
+    if(length(grep(',', sched$Date)) > 0){
+        sched$Date <- as.Date(sched$Date, format = "%a, %b %d, %Y")
+    }else{
+        sched$Date <- as.Date(sched$Date, format = "%a %b %d %Y")
+    }
+    names(sched) <- c('Date','Visitor','PTSvis','Home','PTShome')
+    # remove playoffs
+    if(any(sched$Visitor == 'Playoffs')){
+        sched <- sched[1:(which.max(sched$Visitor == 'Playoffs')-1), ]
+    }
+    sched$PTSvis <- as.numeric(sched$PTSvis)
+    sched$PTShome <- as.numeric(sched$PTShome)
+    teams <- unique(c(sched$Visitor, sched$Home))
+    # check
+    stopifnot(all(teams %in% teamcolors$name))
+    # stopifnot(all(teamcolors$name %in% teams)) # teams can be added/removed
+    
+    
+    # QC stuff. missing values, ties
+    if(any(!is.na(sched$PTShome) & (sched$PTShome==sched$PTSvis))){
+        stop('ties detected')
+    }
+    
+    curves <- lapply(teams, function(team){
+        away <- sched[which(sched$Visitor == team), ]
+        away$WL <- away$PTSvis > away$PTShome
+        home <- sched[which(sched$Home == team), ]
+        home$WL <- home$PTShome > home$PTSvis
+        curve <- rbind(away, home)
+        curve <- curve[order(curve$Date), ]
+        curve$margin <- cumsum(c(-1,1)[factor(curve$WL, levels = c('FALSE','TRUE'))])
+        
+        curve <- curve[, c('Date','WL','margin')]
+        supp <- data.frame(Date = curve$Date-1,
+                           WL = NA,
+                           margin = c(0,curve$margin[-nrow(curve)]))
+        supp <- supp[!supp$Date %in% curve$Date, ]
+        curve <- rbind(supp,curve)
+        curve <- curve[order(curve$Date), ]
+        curve <- curve[!is.na(curve$margin), ] # only count played games
+        if(is.na(curve$WL[nrow(curve)])){
+            curve <- curve[-nrow(curve), ]
+        }
+        return(curve)
+    })
+    names(curves) <- teams
+    # make sure curves start the day before opening day and don't end before the current date
+    opening <- min(sched$Date)
+    today <- Sys.Date() - 1 # it's actually yesterday, because this is set to run in the early morning
+    # don't extend past the end of the season
+    if(today > max(sched$Date)){
+        today <- max(sched$Date)
+    }
+    for(i in seq_along(curves)){
+        curve <- curves[[i]]
+        if(! opening %in% curve$Date){
+            toAdd <- data.frame(Date = opening, WL = NA, margin = 0)
+            curve <- rbind(toAdd, curve)
+        }
+        if(! today %in% curve$Date){
+            # make sure "today" is after opening day
+            if(today > opening){
+                toAdd <- data.frame(Date = today, WL = NA, margin = curve$margin[nrow(curve)])
+                curve <- rbind(curve, toAdd)
+            }
+        }
+        # add running total of wins and losses
+        win <- curve$WL
+        win[is.na(win)] <- FALSE
+        curve$wins <- cumsum(win)
+        loss <- !curve$WL
+        loss[is.na(loss)] <- FALSE
+        curve$losses <- cumsum(loss)
+        
+        curves[[i]] <- curve
+    }
+    curves <- curves[order(sapply(curves, function(x){ x$margin[nrow(x)] }))]
+    teamdata <- teamcolors[match(names(curves), teamcolors$name), ]
+    teamdata$margin <- sapply(curves, function(x){ x$margin[nrow(x)] })
+    teamdata$W <- sapply(curves, function(x){ sum(x$WL, na.rm=TRUE) })
+    teamdata$L <- sapply(curves, function(x){ sum(!x$WL, na.rm=TRUE) })
+    # all(names(curves) == teamdata$name) # check
+    
+    for(i in 1:length(curves)){
+        curves[[i]]$team <- names(curves)[i]
+    }
+    df <- do.call(rbind, curves)
+    
+    require(plotly)
+    
+    # teams need to be a factor sorted by final standings
+    df$team <- factor(df$team, levels = rev(names(curves)))
+    df$abbr <- teamcolors$team[match(df$team, teamcolors$name)]
+    
+    cv <- teamcolors[teamcolors$name %in% df$team, ]
+    cv <- cv$distinct[match(rev(names(curves)), cv$name)]
+    
+    fig <- plot_ly(df, x=~Date, y=~margin, color = ~team, type = 'scatter', mode='lines', colors = cv, 
+                   line = list(width = 3), hoverinfo = 'text',
+                   text = ~paste0(abbr,' ',Date,' ',wins,'-',losses)) |> 
+        layout(legend = list(x = 100, y = 0.5), hovermode = 'x',
+               yaxis = list(title = 'Games Over/Under .500'))
+    
+    if(mode == 'light'){
+        fig <- fig |> layout(plot_bgcolor = '#fffaf6', paper_bgcolor = '#fffaf6')
+    }else{
+        fig <- fig |> layout(plot_bgcolor = '#272935', paper_bgcolor = '#272935',
+                             font = list(color = '#FFFFFF'))
+    }
+    fig
+}
