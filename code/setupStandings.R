@@ -189,6 +189,7 @@ makeWNBAstandingsGraph <- function(year, sched, mode = c('light','dark')){
     
 }
 
+require(plotly)
 interactiveWNBAstandingsGraph <- function(year, sched, mode = c('light','dark')){
     mode <- match.arg(mode)
     
@@ -281,8 +282,6 @@ interactiveWNBAstandingsGraph <- function(year, sched, mode = c('light','dark'))
         curves[[i]]$team <- names(curves)[i]
     }
     df <- do.call(rbind, curves)
-    
-    require(plotly)
     
     # teams need to be a factor sorted by final standings
     df$team <- factor(df$team, levels = rev(names(curves)))

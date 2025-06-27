@@ -348,6 +348,7 @@ makeWNBAeloHiliteGraph <- function(year, team, teamnames, allgames, mode = c('li
 }
 
 # interactive version of the single-year plot, similar to standings
+require(plotly)
 interactiveWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     mode <- match.arg(mode)
     
@@ -434,8 +435,6 @@ interactiveWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
         curves[[i]]$team <- names(curves)[i]
     }
     df <- do.call(rbind, curves)
-    
-    require(plotly)
     
     # teams need to be a factor sorted by final Elo
     df$team <- factor(df$team, levels = rev(names(curves)))
