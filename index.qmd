@@ -209,7 +209,7 @@ interactiveWNBAeloGraph(year, allgames, mode = 'light')
 interactiveWNBAeloGraph(year, allgames, mode = 'dark')
 ```
 
-
+:::
 
 ### About these plots
 
