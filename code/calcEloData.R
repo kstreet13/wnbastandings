@@ -24,7 +24,8 @@ CC <- as.data.frame(matrix(c(
     'Thu, Aug 12, 2021','Connecticut Sun','57','Seattle Storm','79','Neutral site','2021',
     'Tue, Jul 26, 2022','Las Vegas Aces','93','Chicago Sky','83','','2022',
     'Tue, Aug 15, 2023','New York Liberty','82','Las Vegas Aces','63','','2023',
-    'Tue, Jun 25, 2024','Minnesota Lynx','94','New York Liberty','89','','2024'
+    'Tue, Jun 25, 2024','Minnesota Lynx','94','New York Liberty','89','','2024',
+    'Tue, Jul 1, 2025','Indiana Fever','74','Minnesota Lynx','59','','2025'
 ), ncol = 7, byrow = TRUE))
 CC$playoffs <- TRUE
 names(CC) <- names(allgames)

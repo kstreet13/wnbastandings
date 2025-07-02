@@ -130,6 +130,7 @@ sched$away_gameNo <- sapply(1:nrow(sched), function(ii){
 })
 # add current season to all games
 allgames <- rbind(allgames, sched)
+allgames <- allgames[order(allgames$Date), ]
 # calculate Elo for current season
 season <- year
 for(gi in 1:sum(allgames$season == season)){
