@@ -305,7 +305,7 @@ makeWNBAeloHiliteGraph <- function(year, team, teamnames, allgames, mode = c('li
     
     require(scales)
     xl <- range(do.call(rbind, curves)$Date)
-    yl <- range(c(allgames$home_elo_post, allgames$away_elo_post))
+    yl <- range(c(allgames$home_elo_post, allgames$away_elo_post), na.rm=TRUE)
     if(team %in% teamdata$name){ # active
         active <- TRUE
         yearcol <- par('fg')
