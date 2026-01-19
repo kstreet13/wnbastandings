@@ -81,7 +81,8 @@ website:
             href: pages/Connecticut Sun.qmd
           - text: "Dallas Wings"
             href: pages/Dallas Wings.qmd
-          - text: "Golden State Valkyries"    
+          - text: "Golden State Valkyries"   
+            href: pages/Golden State Valkyries.qmd
           - text: "Indiana Fever"
             href: pages/Indiana Fever.qmd
           - text: "Las Vegas Aces"

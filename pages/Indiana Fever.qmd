@@ -32,7 +32,7 @@ ranges <- lapply(allnames, function(team){
 
 
 for(i in 1:length(allnames)){
-    if(ranges[[i]][2] == 2024){
+    if(ranges[[i]][2] == 2025){
             text <- paste0(allnames[i], " (", ranges[[i]][1], " - Present)")
     }else{
             text <- paste0(allnames[i], " (", ranges[[i]][1], " - ", ranges[[i]][2], ")")
@@ -51,9 +51,9 @@ cat('\n')
 #| echo: false
 #| message: false
 #| classes: light-mode
-layout(matrix(1:28,nrow=4,byrow = TRUE))
+layout(matrix(1:30,nrow=5,byrow = TRUE))
 par(mar=c(.1,.2,1,.2))
-for(year in 1997:2024){
+for(year in 1997:2025){
     makeWNBAeloHiliteGraph(year, team, allnames, allgames)
 }
 layout(matrix(1))
@@ -64,9 +64,9 @@ par(mar=c(5,4,4,2)+.1)
 #| echo: false
 #| message: false
 #| classes: dark-mode
-layout(matrix(1:28,nrow=4,byrow = TRUE))
+layout(matrix(1:30,nrow=5,byrow = TRUE))
 par(mar=c(.1,.2,1,.2))
-for(year in 1997:2024){
+for(year in 1997:2025){
     makeWNBAeloHiliteGraph(year, team, allnames, allgames, mode = 'dark')
 }
 layout(matrix(1))

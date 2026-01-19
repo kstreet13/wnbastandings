@@ -4,7 +4,8 @@ source('code/setupStandings.R')
 code <- readLines('pages/Dallas Wings.qmd')
 
 teamnames <- teamcolors$name
-teamnames <- teamnames[teamnames != 'Golden State Valkyries'] # no history yet
+teamnames <- teamnames[teamnames != 'Toronto Tempo'] # no history yet
+# figure out how to handle Portland Fire
 
 for(team in teamnames){
     # replace team

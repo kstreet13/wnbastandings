@@ -10,11 +10,11 @@ getStandings <- function(year){
 }
 
 # can't actually run all at once, basketball-reference gets mad
-for(year in 1997:2024){
+for(year in 1997:2025){
     sched <- getSchedule(year)
     saveRDS(sched, file = paste0('data/sched',year,'.rds'))
     
-    standings <- getStandings(year)
-    saveRDS(standings, file = paste0('data/standings',year,'.rds'))
+    #standings <- getStandings(year)
+    #saveRDS(standings, file = paste0('data/standings',year,'.rds'))
 }
 

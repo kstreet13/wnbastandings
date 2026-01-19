@@ -19,8 +19,12 @@ source('code/setupElo.R')
 #| echo: false
 #| message: false
 year <- 2025
-sched <- getSchedule(year)
-# standings <- getStandings(year)
+inseason <- FALSE
+if(inseason){
+    sched <- getSchedule(year)
+}else{
+    sched <- readRDS(paste0('data/sched',year,'.rds'))
+}
 ```
 
 ::: {.panel-tabset}
@@ -46,122 +50,9 @@ makeWNBAstandingsGraph(year, sched, mode = 'dark')
 #| echo: false
 #| message: false
 # update allgames to include partial season
-# remove unnamed column
-sched <- sched[,names(sched) != ""]
-# add Notes column, if missing
-if(!"Notes" %in% names(sched)){
-    sched$Notes <- ""
+if(inseason){
+    allgames <- addSched2Allgames(year, sched, allgames)
 }
-sched$season <- year
-# annotate playoffs
-sched$playoffs <- FALSE
-if(any(sched$`Visitor/Neutral` == 'Playoffs')){
-    cut <- which.max(sched$`Visitor/Neutral` == 'Playoffs')
-    sched$playoffs[cut:nrow(sched)] <- TRUE
-    sched <- sched[-cut, ]
-}
-sched$Date <- as.Date(sched$Date, format = "%a, %b %d, %Y")
-names(sched)[3] <- 'PTSvis'
-names(sched)[5] <- 'PTShome'
-sched$PTSvis <- as.numeric(sched$PTSvis)
-sched$PTShome <- as.numeric(sched$PTShome)
-sched$season <- as.numeric(sched$season)
-teams <- unique(c(sched$`Visitor/Neutral`, sched$`Home/Neutral`))
-sched <- sched[order(sched$Date), ]
-sched$neutral <- FALSE
-sched$neutral[grep('neutral', tolower(sched$Notes))] <- TRUE
-sched$home_team_abbr <- ""
-sched$away_team_abbr <- ""
-sched$home_team_abbr[sched$`Home/Neutral` %in% c("Orlando Miracle","Connecticut Sun")] <- "CON"
-sched$away_team_abbr[sched$`Visitor/Neutral` %in% c("Orlando Miracle","Connecticut Sun")] <- "CON"
-sched$home_team_abbr[sched$`Home/Neutral` %in% c("Utah Starzz","San Antonio Silver Stars","Las Vegas Aces")] <- "LVA"
-sched$away_team_abbr[sched$`Visitor/Neutral` %in% c("Utah Starzz","San Antonio Silver Stars","Las Vegas Aces")] <- "LVA"
-sched$home_team_abbr[sched$`Home/Neutral` %in% c("Detroit Shock","Tulsa Shock","Dallas Wings")] <- "DAL"
-sched$away_team_abbr[sched$`Visitor/Neutral` %in% c("Detroit Shock","Tulsa Shock","Dallas Wings")] <- "DAL"
-sched$home_team_abbr[sched$`Home/Neutral` == "Atlanta Dream"] <- "ATL"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Atlanta Dream"] <- "ATL"
-sched$home_team_abbr[sched$`Home/Neutral` == "Charlotte Sting"] <- "CHA"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Charlotte Sting"] <- "CHA"
-sched$home_team_abbr[sched$`Home/Neutral` == "Chicago Sky"] <- "CHI"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Chicago Sky"] <- "CHI"
-sched$home_team_abbr[sched$`Home/Neutral` == "Cleveland Rockers"] <- "CLE"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Cleveland Rockers"] <- "CLE"
-sched$home_team_abbr[sched$`Home/Neutral` == "Houston Comets"] <- "HOU"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Houston Comets"] <- "HOU"
-sched$home_team_abbr[sched$`Home/Neutral` == "Indiana Fever"] <- "IND"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Indiana Fever"] <- "IND"
-sched$home_team_abbr[sched$`Home/Neutral` == "Los Angeles Sparks"] <- "LAS"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Los Angeles Sparks"] <- "LAS"
-sched$home_team_abbr[sched$`Home/Neutral` == "Miami Sol"] <- "MIA"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Miami Sol"] <- "MIA"
-sched$home_team_abbr[sched$`Home/Neutral` == "Minnesota Lynx"] <- "MIN"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Minnesota Lynx"] <- "MIN"
-sched$home_team_abbr[sched$`Home/Neutral` == "New York Liberty"] <- "NYL"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "New York Liberty"] <- "NYL"
-sched$home_team_abbr[sched$`Home/Neutral` == "Phoenix Mercury"] <- "PHX"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Phoenix Mercury"] <- "PHX"
-sched$home_team_abbr[sched$`Home/Neutral` == "Portland Fire"] <- "POR"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Portland Fire"] <- "POR"
-sched$home_team_abbr[sched$`Home/Neutral` == "Sacramento Monarchs"] <- "SAC"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Sacramento Monarchs"] <- "SAC"
-sched$home_team_abbr[sched$`Home/Neutral` == "Seattle Storm"] <- "SEA"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Seattle Storm"] <- "SEA"
-sched$home_team_abbr[sched$`Home/Neutral` == "Washington Mystics"] <- "WAS"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Washington Mystics"] <- "WAS"
-sched$home_team_abbr[sched$`Home/Neutral` == "Golden State Valkyries"] <- "GSV"
-sched$away_team_abbr[sched$`Visitor/Neutral` == "Golden State Valkyries"] <- "GSV"
-
-stopifnot(!any(sched$home_team_abbr == ""))
-stopifnot(!any(sched$away_team_abbr == ""))
-
-# add columns for pre- and post-game Elo rating, as well as home team win prob.
-sched$away_elo_pre <- sched$away_elo_post <- sched$home_elo_pre <- sched$home_elo_post <- sched$homeWinProb <- NA
-
-# add columns for home/away game number (for the season)
-sched$home_gameNo <- sapply(1:nrow(sched), function(ii){
-    ytd <- sched[which(sched$season == sched$season[ii] & sched$Date < sched$Date[ii] &
-                              (sched$away_team_abbr == sched$home_team_abbr[ii] | sched$home_team_abbr == sched$home_team_abbr[ii])), ]
-    return(nrow(ytd)+1)
-})
-sched$away_gameNo <- sapply(1:nrow(sched), function(ii){
-    ytd <- sched[which(sched$season == sched$season[ii] & sched$Date < sched$Date[ii] &
-                              (sched$away_team_abbr == sched$away_team_abbr[ii] | sched$home_team_abbr == sched$away_team_abbr[ii])), ]
-    return(nrow(ytd)+1)
-})
-# add current season to all games
-allgames <- rbind(allgames, sched)
-allgames <- allgames[order(allgames$Date), ]
-# calculate Elo for current season
-season <- year
-for(gi in 1:sum(allgames$season == season)){
-    idx <- which(allgames$season == season)[gi]
-    game <- allgames[idx,]
-    
-    # search for previous Elo ratings
-    game$away_elo_pre <- prevElo(game$away_team_abbr, game$Date, game$season)
-    game$home_elo_pre <- prevElo(game$home_team_abbr, game$Date, game$season)
-    
-    # calculate win prob
-    if(!is.na(game$home_elo_pre) & !is.na(game$away_elo_pre)){
-        game$homeWinProb <- homeWinProb(game)
-    }
-    
-    # calculate update
-    if(!is.na(game$PTShome) & !is.na(game$PTSvis)){
-        hshift <- homeEloShift(game)
-        if(game$PTShome > game$PTSvis) stopifnot(hshift > 0)
-        ashift <- awayEloShift(game)
-        if(game$PTShome < game$PTSvis) stopifnot(ashift > 0)
-        if(game$home_gameNo==game$away_gameNo){
-            stopifnot(round(hshift, digits = 4) == round(-ashift, digits = 4))
-        }
-        # update
-        game$away_elo_post <- game$away_elo_pre + ashift
-        game$home_elo_post <- game$home_elo_pre + hshift
-    }
-    allgames[idx,] <- game
-}
-
 # rm(sched)
 ```
 
@@ -226,15 +117,18 @@ Elo ratings are a way of estimating a team's "true" skill level, invented by Arp
 #| echo: false
 #| message: false
 # get upcoming games
-upcoming <- allgames[which(allgames$season == year & is.na(allgames$PTShome)), ]
+season <- allgames[which(allgames$season == year), ]
+
+upcoming <- season[which(is.na(allgames$PTShome)), ]
 if(nrow(upcoming) > 6){
     upcoming <- upcoming[1:6, ]
 }
-getRecord <- function(team, sched){
-    away <- sched[which(sched$`Visitor/Neutral` == team), ]
+
+getRecord <- function(team, season){
+    away <- season[which(season$`Visitor/Neutral` == team), ]
     awayWL <- away$PTSvis > away$PTShome
     awayWL <- awayWL[!is.na(awayWL)]
-    home <- sched[which(sched$`Home/Neutral` == team), ]
+    home <- season[which(season$`Home/Neutral` == team), ]
     homeWL <- home$PTShome > home$PTSvis
     homeWL <- homeWL[!is.na(homeWL)]
     record <- c(sum(c(awayWL,homeWL)), sum(c(!awayWL,!homeWL)))
@@ -289,9 +183,13 @@ layout(matrix(1:2, nrow=1))
 par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
 for(i in seq_len(nrow(upcoming))){
     game <- upcoming[i,]
-    plotGame(game, getRecord(game$`Visitor/Neutral`, sched), getRecord(game$`Home/Neutral`, sched))
+    plotGame(game, getRecord(game$`Visitor/Neutral`, season), getRecord(game$`Home/Neutral`, season))
 }
-
+if(nrow(upcoming) == 0){
+    par(mar=c(.1,.1,.1,.1))
+    plot(0:1,0:1,col='transparent', axes=FALSE)
+    text(.5,.5, 'None')
+}
 ```
 
 ```{r}
@@ -307,9 +205,13 @@ par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.mai
 
 for(i in seq_len(nrow(upcoming))){
     game <- upcoming[i,]
-    plotGame(game, getRecord(game$`Visitor/Neutral`, sched), getRecord(game$`Home/Neutral`, sched))
+    plotGame(game, getRecord(game$`Visitor/Neutral`, season), getRecord(game$`Home/Neutral`, season))
 }
-
+if(nrow(upcoming) == 0){
+    par(mar=c(.1,.1,.1,.1))
+    plot(0:1,0:1,col='transparent', axes=FALSE)
+    text(.5,.5, 'None')
+}
 ```
 
 
@@ -337,9 +239,13 @@ layout(matrix(1:2, nrow=1))
 par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
 for(i in rev(seq_len(nrow(recent)))){
     game <- recent[i,]
-    plotGame(game, getRecord(game$`Visitor/Neutral`, sched), getRecord(game$`Home/Neutral`, sched))
+    plotGame(game, getRecord(game$`Visitor/Neutral`, season), getRecord(game$`Home/Neutral`, season))
 }
-
+if(nrow(recent) == 0){
+    par(mar=c(.1,.1,.1,.1))
+    plot(0:1,0:1,col='transparent', axes=FALSE)
+    text(.5,.5, 'None')
+}
 ```
 
 ```{r}
@@ -355,9 +261,13 @@ par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.mai
 
 for(i in rev(seq_len(nrow(recent)))){
     game <- recent[i,]
-    plotGame(game, getRecord(game$`Visitor/Neutral`, sched), getRecord(game$`Home/Neutral`, sched))
+    plotGame(game, getRecord(game$`Visitor/Neutral`, season), getRecord(game$`Home/Neutral`, season))
 }
-
+if(nrow(recent) == 0){
+    par(mar=c(.1,.1,.1,.1))
+    plot(0:1,0:1,col='transparent', axes=FALSE)
+    text(.5,.5, 'None')
+}
 ```
 
 
@@ -398,7 +308,7 @@ Biggest upset:
 layout(matrix(1:2, nrow=1))
 
 par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
-plotGame(upset, getRecord(upset$`Visitor/Neutral`, sched), getRecord(upset$`Home/Neutral`, sched))
+plotGame(upset, getRecord(upset$`Visitor/Neutral`, season), getRecord(upset$`Home/Neutral`, season))
 ```
 
 ```{r}
@@ -412,5 +322,5 @@ layout(matrix(1:2, nrow=1))
 par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
 par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
 
-plotGame(upset, getRecord(upset$`Visitor/Neutral`, sched), getRecord(upset$`Home/Neutral`, sched))
+plotGame(upset, getRecord(upset$`Visitor/Neutral`, season), getRecord(upset$`Home/Neutral`, season))
 ```

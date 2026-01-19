@@ -1,6 +1,6 @@
 # combine all games data
 allgames <- NULL
-for(year in 1997:2024){
+for(year in 1997:2025){
     sched <- readRDS(paste0('data/sched',year,'.rds'))
     # remove unnamed column
     sched <- sched[,names(sched) != ""]
@@ -215,7 +215,7 @@ awayEloShift <- function(game){
     return(K * MoVmult * pregameFavMult)
 }
 
-for(season in 1997:2024){
+for(season in 1997:2025){
     for(gi in 1:sum(allgames$season == season)){
         idx <- which(allgames$season == season)[gi]
         game <- allgames[idx,]
@@ -244,4 +244,4 @@ for(season in 1997:2024){
 
 rm(game,sched)
 
-saveRDS(allgames, file = 'data/allgames97_24.rds')
+saveRDS(allgames, file = 'data/allgames97_25.rds')

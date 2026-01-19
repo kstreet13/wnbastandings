@@ -1,5 +1,5 @@
 
-allgames <- readRDS('data/allgames97_24.rds')
+allgames <- readRDS('data/allgames97_25.rds')
 
 adjEloDiff <- function(awayElo, homeElo, neutral, playoff){
     # tried 75, 80 was better
@@ -327,10 +327,10 @@ makeWNBAeloHiliteGraph <- function(year, team, teamnames, allgames, mode = c('li
             cc <- as.character(teamdata[teamdata$name == team, ][,c('color1','color2')])
             curve <- curves[[team]]
             if(active){
-                lines(curve$Date, curve$elo, col=cc[1], lwd=4)
-                lines(curve$Date, curve$elo, col=cc[2], lwd=1)
+                lines(curve$Date, curve$elo, col=cc[1], lwd=5)
+                lines(curve$Date, curve$elo, col=cc[2], lwd=2)
             }else{
-                lines(curve$Date, curve$elo, col=alpha(cc[1], alpha=.6), lwd=3)
+                lines(curve$Date, curve$elo, col=alpha(cc[1], alpha=.6), lwd=5)
             }
             # check if team won championship
             lastgame <- allgames[which(allgames$season == year), ]
@@ -473,3 +473,125 @@ interactiveWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     }
     fig
 }
+
+# when in season: update `allgames` to include partial season
+addSched2Allgames <- function(year, sched, allgames){
+    # remove unnamed column
+    sched <- sched[,names(sched) != ""]
+    # add Notes column, if missing
+    if(!"Notes" %in% names(sched)){
+        sched$Notes <- ""
+    }
+    sched$season <- year
+    # annotate playoffs
+    sched$playoffs <- FALSE
+    if(any(sched$`Visitor/Neutral` == 'Playoffs')){
+        cut <- which.max(sched$`Visitor/Neutral` == 'Playoffs')
+        sched$playoffs[cut:nrow(sched)] <- TRUE
+        sched <- sched[-cut, ]
+    }
+    sched$Date <- as.Date(sched$Date, format = "%a, %b %d, %Y")
+    names(sched)[3] <- 'PTSvis'
+    names(sched)[5] <- 'PTShome'
+    sched$PTSvis <- as.numeric(sched$PTSvis)
+    sched$PTShome <- as.numeric(sched$PTShome)
+    sched$season <- as.numeric(sched$season)
+    teams <- unique(c(sched$`Visitor/Neutral`, sched$`Home/Neutral`))
+    sched <- sched[order(sched$Date), ]
+    sched$neutral <- FALSE
+    sched$neutral[grep('neutral', tolower(sched$Notes))] <- TRUE
+    sched$home_team_abbr <- ""
+    sched$away_team_abbr <- ""
+    sched$home_team_abbr[sched$`Home/Neutral` %in% c("Orlando Miracle","Connecticut Sun")] <- "CON"
+    sched$away_team_abbr[sched$`Visitor/Neutral` %in% c("Orlando Miracle","Connecticut Sun")] <- "CON"
+    sched$home_team_abbr[sched$`Home/Neutral` %in% c("Utah Starzz","San Antonio Silver Stars","Las Vegas Aces")] <- "LVA"
+    sched$away_team_abbr[sched$`Visitor/Neutral` %in% c("Utah Starzz","San Antonio Silver Stars","Las Vegas Aces")] <- "LVA"
+    sched$home_team_abbr[sched$`Home/Neutral` %in% c("Detroit Shock","Tulsa Shock","Dallas Wings")] <- "DAL"
+    sched$away_team_abbr[sched$`Visitor/Neutral` %in% c("Detroit Shock","Tulsa Shock","Dallas Wings")] <- "DAL"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Atlanta Dream"] <- "ATL"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Atlanta Dream"] <- "ATL"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Charlotte Sting"] <- "CHA"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Charlotte Sting"] <- "CHA"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Chicago Sky"] <- "CHI"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Chicago Sky"] <- "CHI"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Cleveland Rockers"] <- "CLE"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Cleveland Rockers"] <- "CLE"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Houston Comets"] <- "HOU"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Houston Comets"] <- "HOU"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Indiana Fever"] <- "IND"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Indiana Fever"] <- "IND"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Los Angeles Sparks"] <- "LAS"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Los Angeles Sparks"] <- "LAS"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Miami Sol"] <- "MIA"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Miami Sol"] <- "MIA"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Minnesota Lynx"] <- "MIN"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Minnesota Lynx"] <- "MIN"
+    sched$home_team_abbr[sched$`Home/Neutral` == "New York Liberty"] <- "NYL"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "New York Liberty"] <- "NYL"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Phoenix Mercury"] <- "PHX"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Phoenix Mercury"] <- "PHX"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Portland Fire"] <- "POR"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Portland Fire"] <- "POR"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Sacramento Monarchs"] <- "SAC"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Sacramento Monarchs"] <- "SAC"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Seattle Storm"] <- "SEA"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Seattle Storm"] <- "SEA"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Washington Mystics"] <- "WAS"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Washington Mystics"] <- "WAS"
+    sched$home_team_abbr[sched$`Home/Neutral` == "Golden State Valkyries"] <- "GSV"
+    sched$away_team_abbr[sched$`Visitor/Neutral` == "Golden State Valkyries"] <- "GSV"
+    
+    stopifnot(!any(sched$home_team_abbr == ""))
+    stopifnot(!any(sched$away_team_abbr == ""))
+    
+    # add columns for pre- and post-game Elo rating, as well as home team win prob.
+    sched$away_elo_pre <- sched$away_elo_post <- sched$home_elo_pre <- sched$home_elo_post <- sched$homeWinProb <- NA
+    
+    # add columns for home/away game number (for the season)
+    sched$home_gameNo <- sapply(1:nrow(sched), function(ii){
+        ytd <- sched[which(sched$season == sched$season[ii] & sched$Date < sched$Date[ii] &
+                               (sched$away_team_abbr == sched$home_team_abbr[ii] | sched$home_team_abbr == sched$home_team_abbr[ii])), ]
+        return(nrow(ytd)+1)
+    })
+    sched$away_gameNo <- sapply(1:nrow(sched), function(ii){
+        ytd <- sched[which(sched$season == sched$season[ii] & sched$Date < sched$Date[ii] &
+                               (sched$away_team_abbr == sched$away_team_abbr[ii] | sched$home_team_abbr == sched$away_team_abbr[ii])), ]
+        return(nrow(ytd)+1)
+    })
+    # add current season to all games
+    allgames <- rbind(allgames, sched)
+    allgames <- allgames[order(allgames$Date), ]
+    # calculate Elo for current season
+    season <- year
+    for(gi in 1:sum(allgames$season == season)){
+        idx <- which(allgames$season == season)[gi]
+        game <- allgames[idx,]
+        
+        # search for previous Elo ratings
+        game$away_elo_pre <- prevElo(game$away_team_abbr, game$Date, game$season)
+        game$home_elo_pre <- prevElo(game$home_team_abbr, game$Date, game$season)
+        
+        # calculate win prob
+        if(!is.na(game$home_elo_pre) & !is.na(game$away_elo_pre)){
+            game$homeWinProb <- homeWinProb(game)
+        }
+        
+        # calculate update
+        if(!is.na(game$PTShome) & !is.na(game$PTSvis)){
+            hshift <- homeEloShift(game)
+            if(game$PTShome > game$PTSvis) stopifnot(hshift > 0)
+            ashift <- awayEloShift(game)
+            if(game$PTShome < game$PTSvis) stopifnot(ashift > 0)
+            if(game$home_gameNo==game$away_gameNo){
+                stopifnot(round(hshift, digits = 4) == round(-ashift, digits = 4))
+            }
+            # update
+            game$away_elo_post <- game$away_elo_pre + ashift
+            game$home_elo_post <- game$home_elo_pre + hshift
+        }
+        allgames[idx,] <- game
+    }
+    return(allgames)
+}
+
+
