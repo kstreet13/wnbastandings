@@ -126,6 +126,8 @@ website:
                 href: pages/Tulsa Shock.qmd
               - text: "Utah Starzz"
                 href: pages/Utah Starzz.qmd
+      - text: "Expansion Teams"
+        href: expansion.qmd
       - text: "About"
         href: about.qmd
 
