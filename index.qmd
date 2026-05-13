@@ -1,5 +1,5 @@
 ---
-title: "2025 WNBA Standings"
+title: "2026 WNBA Standings"
 format: 
   html:
     fig-width: 10
@@ -10,18 +10,23 @@ lightbox: true
 
 ```{r}
 #| include: false
-source('code/setupStandings.R')
-source('code/setupElo.R')
+source('code/setup.R')
+source('code/utils.R')
+source('code/plotting.R')
+
+# 2026 Elo plot is clearly wrong. Looks like LVA played PHX both games, but second game was against LAS
+
 ```
 
 
 ```{r}
 #| echo: false
 #| message: false
-year <- 2025
-inseason <- FALSE
+year <- 2026
+inseason <- TRUE
 if(inseason){
-    sched <- getSchedule(year)
+    #sched <- getSchedule(year) ################################################
+    sched <- readRDS('~/Downloads/sched2026.rds')
 }else{
     sched <- readRDS(paste0('data/sched',year,'.rds'))
 }
@@ -119,7 +124,7 @@ Elo ratings are a way of estimating a team's "true" skill level, invented by Arp
 # get upcoming games
 season <- allgames[which(allgames$season == year), ]
 
-upcoming <- season[which(is.na(allgames$PTShome)), ]
+upcoming <- season[which(is.na(season$PTShome)), ]
 if(nrow(upcoming) > 6){
     upcoming <- upcoming[1:6, ]
 }

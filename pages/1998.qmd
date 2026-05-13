@@ -10,8 +10,9 @@ lightbox: true
 
 ```{r}
 #| include: false
-source('code/setupStandings.R')
-source('code/setupElo.R')
+source('code/setup.R')
+source('code/utils.R')
+source('code/plotting.R')
 ```
 
 

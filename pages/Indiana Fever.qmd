@@ -14,22 +14,21 @@ lightbox: true
 #| echo: false
 #| message: false
 #| results: asis
-source('code/setupStandings.R')
-source('code/setupElo.R')
+source('code/setup.R')
+source('code/utils.R')
+source('code/plotting.R')
 
 team <- "Indiana Fever"
-abbr1 <- teamcolors$team[teamcolors$name == team]
-abbr2 <- allgames$home_team_abbr[which(allgames$`Home/Neutral` == team)[1]]
-if(is.na(abbr2)){
-    abbr2 <- abbr1
-}
-allnames <- unique(allgames$`Home/Neutral`[which(allgames$home_team_abbr == abbr2)])
-allabbrs <- teamcolors$team[match(allnames, teamcolors$name)]
+franchise <- teamdata$franchise[teamdata$team == team]
+
+allnames <- unique(allgames$`Home/Neutral`[which(allgames$home_franchise == franchise)])
+allnames <- c(allnames, unique(allgames$`Visitor/Neutral`[which(allgames$away_franchise == franchise)]))
+allnames <- unique(allnames)
+allabbrs <- teamdata$abbr[match(allnames, teamdata$team)]
 
 ranges <- lapply(allnames, function(team){
-    range(allgames$season[allgames$`Home/Neutral` == team])
+    range(allgames$season[allgames$`Home/Neutral` == team | allgames$`Visitor/Neutral` == team])
 })
-
 
 for(i in 1:length(allnames)){
     if(ranges[[i]][2] == 2025){

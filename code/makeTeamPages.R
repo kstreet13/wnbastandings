@@ -1,9 +1,9 @@
-source('code/setupStandings.R')
+source('code/setup.R')
 
 # Dallas Wings are the template (multiple moves)
 code <- readLines('pages/Dallas Wings.qmd')
 
-teamnames <- teamcolors$name
+teamnames <- teamdata$team
 teamnames <- teamnames[teamnames != 'Toronto Tempo'] # no history yet
 # figure out how to handle Portland Fire
 

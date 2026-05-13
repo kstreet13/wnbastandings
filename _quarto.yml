@@ -15,6 +15,8 @@ website:
         href: index.qmd
       - section: "Past Years"
         contents:
+          - text: "2025"
+            href: pages/2025.qmd
           - text: "2024"
             href: pages/2024.qmd
           - text: "2023"
@@ -95,8 +97,11 @@ website:
             href: pages/New York Liberty.qmd
           - text: "Phoenix Mercury"
             href: pages/Phoenix Mercury.qmd
+          - text: "Portland Fire"
+            href: pages/Portland Fire.qmd
           - text: "Seattle Storm"
             href: pages/Seattle Storm.qmd
+          - text: "Toronto Tempo"
           - text: "Washington Mystics"
             href: pages/Washington Mystics.qmd
           - section: "Past Teams"
@@ -113,8 +118,6 @@ website:
                 href: pages/Miami Sol.qmd
               - text: "Orlando Miracle"
                 href: pages/Orlando Miracle.qmd
-              - text: "Portland Fire"
-                href: pages/Portland Fire.qmd
               - text: "Sacramento Monarchs"
                 href: pages/Sacramento Monarchs.qmd
               - text: "San Antonio Silver Stars"

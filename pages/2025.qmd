@@ -1,5 +1,5 @@
 ---
-title: "2022 WNBA Results"
+title: "2025 WNBA Results"
 format: 
   html:
     fig-width: 10
@@ -19,7 +19,7 @@ source('code/plotting.R')
 ```{r}
 #| echo: false
 #| message: false
-year <- 2022
+year <- 2025
 sched <- readRDS(paste0('data/sched',year,'.rds'))
 # standings <- getStandings(year)
 ```
