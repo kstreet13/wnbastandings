@@ -1,0 +1,265 @@
+---
+title: "Expansion Teams"
+format: 
+  html:
+    fig-width: 10
+    fig-height: 6
+    toc: false
+lightbox: true
+---
+
+In 2025, somebody on Reddit asked me why the Valkyries initial Elo Rating of 1300 was so low, seemingly putting them at a disadvantage in the rankings.
+While I didn't choose the value, 1300 is a default that has generally been appropriate for expansion teams, whose average end-of-season rating is 1306 (or 1291 if you exclude the Valks).
+The Valkyries just happened to be a historically good expansion team.
+To illustrate that point, I decided to compare all the expansion teams throughout the history of the league:
+
+```{r}
+#| include: false
+source('code/setup.R')
+source('code/utils.R')
+source('code/plotting.R')
+
+expanYrs <- read.csv(text = 'team,year
+Detroit Shock,1998
+Washington Mystics,1998
+Minnesota Lynx,1999
+Orlando Miracle,1999
+Indiana Fever,2000
+Miami Sol,2000
+Portland Fire,2000
+Seattle Storm,2000
+Chicago Sky,2006
+Atlanta Dream,2008
+Golden State Valkyries,2025')
+
+getEloCurve <- function(team, year, allgames){
+    
+    games <- allgames[which(allgames$season == year), ]
+    
+    # exclude playoffs, include CC
+    games <- games[seq_len(max(which(!games$playoffs))), ]
+    dateRange <- range(games$Date)
+    
+    # get elo from home and away games
+    eloA <- games[games$`Visitor/Neutral` == team, c('Date','Visitor/Neutral','season','away_abbr','away_elo_pre','away_elo_post')]
+    eloH <- games[games$`Home/Neutral` == team, c('Date','Home/Neutral','season','home_abbr','home_elo_pre','home_elo_post')]
+    names(eloA) <- c('Date','Team_Name','season','team_abbr','elo_pre','elo_post')
+    names(eloH) <- names(eloA)
+    elo <- rbind(eloA, eloH)
+    elo <- elo[order(elo$Date), c('Date','elo_pre','elo_post')]
+    rm(eloA,eloH)
+    # make elo curve by setting elo_pre as the previous day
+    elopre <- elo[, c('Date','elo_pre')]
+    elopre$Date <- elopre$Date - 1
+    elopost <- elo[, c('Date','elo_post')]
+    names(elopre) <- names(elopost) <- c('Date','elo')
+    # there can be back-to-back games, so don't include elo_pre if there was a game that day
+    elopre <- elopre[!elopre$Date %in% elopost$Date, ]
+    elo <- rbind(elopre,elopost)
+    elo <- elo[order(elo$Date), ]
+    
+    # add beginning and end
+    if(! dateRange[1] %in% elo$Date){
+        elo <- rbind(elo[1,], elo)
+        elo$Date[1] <- dateRange[1]
+    }
+    if(! dateRange[2] %in% elo$Date){
+        elo <- rbind(elo, elo[nrow(elo),])
+        elo$Date[nrow(elo)] <- dateRange[2]
+    }
+    return(elo)
+}
+
+```
+
+
+```{r}
+#| echo: false
+#| message: false
+# merge with team abbreviations and color data
+expanYrs <- merge(expanYrs, teamdata, all.x = TRUE)
+
+# get elo curves as percentage of season
+curves <- lapply(seq_len(nrow(expanYrs)), function(i){
+    cv <- getEloCurve(expanYrs$team[i], expanYrs$year[i], allgames)
+    cv$Date <- as.numeric(cv$Date)
+    cv$Date <- 100 * (cv$Date - min(cv$Date)) / (max(cv$Date) - min(cv$Date))
+    return(cv)
+})
+
+# sort by final elo
+ord <- order(sapply(curves, function(x){ x$elo[nrow(x)] }))
+curves <- curves[ord]
+expanYrs <- expanYrs[ord, ]
+expanYrs$elo <- sapply(curves, function(x){ x$elo[nrow(x)] })
+
+# build legend df
+lgnd <- expanYrs[nrow(expanYrs):1, ]
+lgnd$label <- paste0(lgnd$abbr,' ', lgnd$year,' (',round(lgnd$elo),')')
+```
+
+
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
+
+layout(matrix(c(1,1,1,2), nrow=1))
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+# if(mode == 'dark'){
+#     par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
+# }
+
+require(scales)
+xl <- range(do.call(rbind, curves)$Date)
+yl <- range(sapply(curves,function(x){x$elo}))
+plot(xl, yl, col = 'transparent',
+     xlab = 'Date (% of Season)', ylab='Elo Rating', main = 'Expansion Team Elo Ratings', las = 1)
+abline(h = c(1300,1500), lty = 2)
+
+for(i in 1:length(curves)){
+    lines(curves[[i]]$Date, curves[[i]]$elo, col=expanYrs$color1[i], lwd=4)
+    lines(curves[[i]]$Date, curves[[i]]$elo, col=expanYrs$color2[i], lwd=1)
+    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$elo[nrow(curves[[i]])], col=expanYrs$color2[i], pch=16, cex=2)
+    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$elo[nrow(curves[[i]])], col=expanYrs$color1[i], pch=16, cex = 1.5)
+}
+
+par(mar = c(5,0,4,1)+.1)
+plot.new()
+legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, 
+       col = lgnd$color1, cex = 1.3)
+legend('left', legend = lgnd$label, bty='n', lwd=1.1, 
+       col = lgnd$color2, cex = 1.3)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+
+layout(matrix(c(1,1,1,2), nrow=1))
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
+
+require(scales)
+xl <- range(do.call(rbind, curves)$Date)
+yl <- range(sapply(curves,function(x){x$elo}))
+plot(xl, yl, col = 'transparent',
+     xlab = 'Date (% of Season)', ylab='Elo Rating', main = 'Expansion Team Elo Ratings', las = 1)
+abline(h = c(1300,1500), lty = 2)
+
+for(i in 1:length(curves)){
+    lines(curves[[i]]$Date, curves[[i]]$elo, col=expanYrs$color1[i], lwd=4)
+    lines(curves[[i]]$Date, curves[[i]]$elo, col=expanYrs$color2[i], lwd=1)
+    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$elo[nrow(curves[[i]])], col=expanYrs$color2[i], pch=16, cex=2)
+    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$elo[nrow(curves[[i]])], col=expanYrs$color1[i], pch=16, cex = 1.5)
+}
+
+par(mar = c(5,0,4,1)+.1)
+plot.new()
+legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, 
+       col = lgnd$color1, cex = 1.3)
+legend('left', legend = lgnd$label, bty='n', lwd=1.1, 
+       col = lgnd$color2, cex = 1.3)
+```
+
+The Valkyries' 2025 season stands above every other expansion team, with only the 1998 Detroit Shock coming close (in only the second year of the league's existence).
+The two most recent expansion teams before the Valkyries were the Atlanta Dream (2008) and Chicago Sky (2006), both of whom finished well below the initial mark of 1300.
+
+
+
+We can also look at these rankings by game number, to see if the Valkyries benefitted from an expanded schedule:
+
+```{r}
+#| echo: false
+#| message: false
+# merge with team abbreviations and color data
+expanYrs <- merge(expanYrs, teamdata, all.x = TRUE)
+
+# get elo curves as number of games
+curves <- lapply(seq_len(nrow(expanYrs)), function(i){
+    cv <- getEloCurve(expanYrs$team[i], expanYrs$year[i], allgames)
+    keep <- c(TRUE, cv$elo[-1] != cv$elo[-length(cv$elo)])
+    cv <- cv[keep, ]
+    cv$Date <- c(0,seq_len(nrow(cv)-1))
+    return(cv)
+})
+
+# sort by final elo
+ord <- order(sapply(curves, function(x){ x$elo[nrow(x)] }))
+curves <- curves[ord]
+expanYrs <- expanYrs[ord, ]
+expanYrs$elo <- sapply(curves, function(x){ x$elo[nrow(x)] })
+
+# build legend df
+lgnd <- expanYrs[nrow(expanYrs):1, ]
+lgnd$label <- paste0(lgnd$abbr,' ', lgnd$year,' (',round(lgnd$elo),')')
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| classes: light-mode
+
+layout(matrix(c(1,1,1,2), nrow=1))
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+# if(mode == 'dark'){
+#     par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
+# }
+
+require(scales)
+xl <- range(do.call(rbind, curves)$Date)
+yl <- range(sapply(curves,function(x){x$elo}))
+plot(xl, yl, col = 'transparent',
+     xlab = 'Game No.', ylab='Elo Rating', main = 'Expansion Team Elo Ratings', las = 1)
+abline(h = c(1300,1500), lty = 2)
+
+for(i in 1:length(curves)){
+    lines(curves[[i]]$Date, curves[[i]]$elo, col=expanYrs$color1[i], lwd=4)
+    lines(curves[[i]]$Date, curves[[i]]$elo, col=expanYrs$color2[i], lwd=1)
+    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$elo[nrow(curves[[i]])], col=expanYrs$color2[i], pch=16, cex=2)
+    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$elo[nrow(curves[[i]])], col=expanYrs$color1[i], pch=16, cex = 1.5)
+}
+
+par(mar = c(5,0,4,1)+.1)
+plot.new()
+legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, 
+       col = lgnd$color1, cex = 1.3)
+legend('left', legend = lgnd$label, bty='n', lwd=1.1, 
+       col = lgnd$color2, cex = 1.3)
+```
+```{r}
+#| echo: false
+#| message: false
+#| classes: dark-mode
+
+layout(matrix(c(1,1,1,2), nrow=1))
+par(mar = c(5,5,4,0)+.1, cex.lab = 1.25, cex.main = 2, bg = '#fffaf6')
+par(fg = 'white', bg = '#272935', col.axis = 'white', col.lab = 'white', col.main = 'white', col.sub = 'white')
+
+require(scales)
+xl <- range(do.call(rbind, curves)$Date)
+yl <- range(sapply(curves,function(x){x$elo}))
+plot(xl, yl, col = 'transparent',
+     xlab = 'Game No.', ylab='Elo Rating', main = 'Expansion Team Elo Ratings', las = 1)
+abline(h = c(1300,1500), lty = 2)
+
+for(i in 1:length(curves)){
+    lines(curves[[i]]$Date, curves[[i]]$elo, col=expanYrs$color1[i], lwd=4)
+    lines(curves[[i]]$Date, curves[[i]]$elo, col=expanYrs$color2[i], lwd=1)
+    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$elo[nrow(curves[[i]])], col=expanYrs$color2[i], pch=16, cex=2)
+    points(curves[[i]]$Date[nrow(curves[[i]])], curves[[i]]$elo[nrow(curves[[i]])], col=expanYrs$color1[i], pch=16, cex = 1.5)
+}
+
+par(mar = c(5,0,4,1)+.1)
+plot.new()
+legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, 
+       col = lgnd$color1, cex = 1.3)
+legend('left', legend = lgnd$label, bty='n', lwd=1.1, 
+       col = lgnd$color2, cex = 1.3)
+```
+
+By this metric, the Valkyries' 2025 season seems pretty closely aligned with the 1998 Detroit Shock, who actually had a slightly higher rating through 30 games.
+Although they entered the league at very different points in its history, these seem to be the two best showings by any expansion team.
+
