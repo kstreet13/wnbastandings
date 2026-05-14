@@ -631,3 +631,59 @@ interactiveWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     }
     fig
 }
+
+
+#############
+# UTILITIES #
+#############
+spaceVertically <- function(y, height = .07, maxh = NULL, minh = NULL, maxiters = 100){
+    laby <- y # adjust laby until labels look nice
+    text(rep(1.1,10),laby, labels = 1:10)
+    
+    height <- .075 # fraction of vertical space reserved for each label
+    maxiters <- 100
+    h <- height * (par()$usr[4] - par()$usr[3]) # actual height
+    if(is.null(maxh)){
+        maxh <- par()$usr[4] - h/3
+    }
+    if(is.null(minh)){
+        minh <- par()$usr[3] + h/3
+    }
+    
+    converged <- FALSE
+    iters <- 0
+    while(!converged){
+        iters <- iters+1
+        print(iters)
+        # calculate the "force" on each label
+        f <- sapply(seq_along(laby), function(i){
+            yi <- laby[i]
+            fi <- 0
+            if(any(abs(laby[-i] - yi) <= h)){
+                ds <- abs(laby - yi)
+                names(ds) <- seq_along(laby)
+                ds <- sort(ds, decreasing = FALSE)[-1] # point is distance 0 from itself
+                toconsider <- as.numeric(names(ds)[ds < h])
+                # closest one exerts normal force
+                # after that, force is successively halved
+                for(j in seq_along(toconsider)){
+                    d <- yi - laby[toconsider[j]]
+                    fi <- fi + (1/2^(j-1)) * sign(d)*(h-abs(d))/2
+                }
+            }
+            if(abs(yi - y[i]) > h*.01){
+                fi <- fi + h*.01*sign(y[i]-yi)
+            }
+            return(fi)
+        })
+        
+        # move the labels
+        laby <- laby + f
+        laby[laby < minh] <- minh
+        laby[laby > maxh] <- maxh
+        
+        # check convergence
+        converged <- sum(abs(f)) < h/100 | iters >= maxiters
+    }
+    return(laby)
+}
