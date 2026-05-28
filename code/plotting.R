@@ -92,19 +92,11 @@ makeWNBAstandingsGraph <- function(year, sched, mode = c('light','dark')){
         }
     }
     
-    # check against actual standings
-    # standings$Team <- gsub('[*]','', standings$Team)
-    # for(team in teams){
-    #     s.i <- which(standings$Team == team)
-    #     c.i <- which(names(curves) == team)
-    #     stopifnot(curves[[c.i]]$margin[nrow(curves[[c.i]])] == standings$W[s.i] - standings$L[s.i])
-    # }
-    
     # build legend df with blank row to separate non/playoff teams
     lgnd <- teamdata[nrow(teamdata):1, ]
     lgnd <- lgnd[match(names(curves), lgnd$team), ]
     lgnd <- lgnd[nrow(lgnd):1, ]
-    lgnd$nameRecord <- paste0(lgnd$team,' (',lgnd$W,'-',lgnd$L,')')
+    lgnd$nameRecord <- paste0(lgnd$abbr,' (',lgnd$W,'-',lgnd$L,')')
     # lgnd <- rbind(lgnd[1:8,], NA, lgnd[9:nrow(lgnd), ]) # add gap
     
     layout(matrix(c(1,1,1,2), nrow=1))
@@ -131,11 +123,15 @@ makeWNBAstandingsGraph <- function(year, sched, mode = c('light','dark')){
     }
     
     par(mar = c(5,0,4,1)+.1)
-    plot.new()
-    legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, col = lgnd$color1, cex = 1.3)
-    legend('left', legend = lgnd$nameRecord, 
-           bty='n', lwd=1.1, col = lgnd$color2, cex = 1.3)
-    
+    plot(c(0,10), range(sapply(curves,function(x){x$margin})), col = 'transparent',
+         xlab = '', ylab='', axes = FALSE)
+    lgnd$yPosLab <- spaceVertically(lgnd$margin, height = .05)
+    segments(x0=.5, y0=lgnd$yPosLab, x1=1.5, col = lgnd$color1, lwd=4.5)
+    segments(x0=.5, y0=lgnd$yPosLab, x1=1.5, col = lgnd$color2, lwd=1.1)
+    points(rep(1.5,nrow(lgnd)), lgnd$yPosLab, col = lgnd$color2, pch = 16, cex = 2)
+    points(rep(1.5,nrow(lgnd)), lgnd$yPosLab, col = lgnd$color1, pch = 16, cex = 1.5)
+    text(x = 2, y = lgnd$yPosLab, pos = 4,
+         labels = lgnd$nameRecord, font = 2, cex=1.5)
 }
 
 require(plotly)
@@ -343,7 +339,7 @@ makeWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     
     # build legend df
     lgnd <- teamdata[nrow(teamdata):1, ]
-    lgnd$nameElo <- paste0(lgnd$team,' (',round(lgnd$elo),')')
+    lgnd$nameElo <- paste0(lgnd$abbr,' (',round(lgnd$elo),')')
     
     
     layout(matrix(c(1,1,1,2), nrow=1))
@@ -376,12 +372,15 @@ makeWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
     }
     
     par(mar = c(5,0,4,1)+.1)
-    plot.new()
-    legend('left', legend = rep('', nrow(lgnd)), bty='n', lwd=4.5, 
-           col = lgnd$color1, cex = 1.3)
-    legend('left', legend = lgnd$nameElo, bty='n', lwd=1.1, 
-           col = lgnd$color2, cex = 1.3)
-    
+    plot(c(0,10), range(sapply(curves,function(x){x$elo})), col = 'transparent',
+         xlab = '', ylab='', axes = FALSE)
+    lgnd$yPosLab <- spaceVertically(lgnd$elo, height = .05)
+    segments(x0=.5, y0=lgnd$yPosLab, x1=1.5, col = lgnd$color1, lwd=4.5)
+    segments(x0=.5, y0=lgnd$yPosLab, x1=1.5, col = lgnd$color2, lwd=1.1)
+    points(rep(1.5,nrow(lgnd)), lgnd$yPosLab, col = lgnd$color2, pch = 16, cex = 2)
+    points(rep(1.5,nrow(lgnd)), lgnd$yPosLab, col = lgnd$color1, pch = 16, cex = 1.5)
+    text(x = 2, y = lgnd$yPosLab, pos = 4,
+         labels = lgnd$nameElo, font = 2, cex=1.5)
 }
 
 # single-year plot with one team highlighted, for team histories
@@ -638,9 +637,17 @@ interactiveWNBAeloGraph <- function(year, allgames, mode = c('light','dark')){
 #############
 spaceVertically <- function(y, height = .07, maxh = NULL, minh = NULL, maxiters = 100){
     laby <- y # adjust laby until labels look nice
-    text(rep(1.1,10),laby, labels = 1:10)
+    # text(rep(1.1,10),laby, labels = 1:10)
     
-    height <- .075 # fraction of vertical space reserved for each label
+    # randomly resolve ties
+    if(any(duplicated(laby))){
+        diff <- abs(outer(laby,laby,FUN='-'))
+        smallestRealDiff <- min(diff[diff > 0])
+        laby[duplicated(laby)] <- laby[duplicated(laby)] + 
+            runif(sum(duplicated(laby)), min = -smallestRealDiff/2, max = smallestRealDiff/2)
+    }
+    
+    # height <- .07 # fraction of vertical space reserved for each label
     maxiters <- 100
     h <- height * (par()$usr[4] - par()$usr[3]) # actual height
     if(is.null(maxh)){
@@ -654,7 +661,7 @@ spaceVertically <- function(y, height = .07, maxh = NULL, minh = NULL, maxiters 
     iters <- 0
     while(!converged){
         iters <- iters+1
-        print(iters)
+        #print(iters)
         # calculate the "force" on each label
         f <- sapply(seq_along(laby), function(i){
             yi <- laby[i]
