@@ -6,6 +6,9 @@ website:
   title: "WNBA Standings"
   navbar:
     background: primary
+    tools:
+      - icon: github
+        href: https://github.com/kstreet13/wnbastandings/
   sidebar:
     style: "docked"
     search: true
