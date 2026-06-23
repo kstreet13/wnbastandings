@@ -1,4 +1,77 @@
-# Elo ratings
+# explore Elo ratings
+
+# trying to figure out how to accurate simulate upcoming games
+
+source('code/setup.R')
+source('code/utils.R')
+source('code/plotting.R')
+year <- 2026
+inseason <- TRUE
+if(inseason){
+    sched <- getSchedule(year)
+    #sched <- readRDS('~/Downloads/sched2026.rds') #############################
+}else{
+    sched <- readRDS(paste0('data/sched',year,'.rds'))
+}
+if(inseason){
+    allgames <- addSched2Allgames(year, sched, allgames)
+}
+
+
+# HOME COURT ADVANTAGE
+# how much is home court advantage worth?
+# exclude playoffs because "home" is not independent of team quality
+ptsdiff <- (allgames$PTShome - allgames$PTSvis)[which(!allgames$playoffs)]
+hist(ptsdiff, breaks=50)
+abline(v=mean(ptsdiff, na.rm = TRUE))
+mean(ptsdiff, na.rm = TRUE)
+# home court advantage fell off ~2020 (2020 was bubble season), but it's back!
+pdbs <- sapply(1997:2025, function(year){
+    ptsdiff <- (allgames$PTShome - allgames$PTSvis)[which(!allgames$playoffs & allgames$season == year)]
+    return(mean(ptsdiff))
+})
+plot(1997:2025, pdbs, type='b')
+# ANSWER: 2.8 POINTS
+# is this equal to 80 Elo points? not quite
+
+# relationship between Elo points and in-game points
+ind <- which(!allgames$playoffs)
+aed <- sapply(ind, function(i){
+    adjEloDiff(allgames[i,]$away_elo_pre, allgames[i,]$home_elo_pre, allgames[i,]$neutral, allgames[i,]$playoffs)
+})
+plot(aed, allgames$PTShome[ind] - allgames$PTSvis[ind], col=rgb(0,0,0,.2))
+l <- lm(allgames$PTShome[ind] - allgames$PTSvis[ind] ~ 0+aed)
+l
+# ANSWER: difference of 100 Elo points roughly equals difference of 3.838 in-game points (during regular season)
+
+
+# Elo ratings have SD of 200, so SD of points should be 200*3.838/100
+
+
+
+
+
+
+
+
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###########
+### OLD ###
+###########
 
 source('code/setupElo.R')
 
@@ -64,13 +137,13 @@ dev.off()
 
 # check win prob accuracy
 homewin <- allgames$PTShome > allgames$PTSvis
-cuts <- quantile(allgames$homeWinProb, probs = seq(0,1, .05))
+cuts <- quantile(allgames$homeWinProb, probs = seq(0,1, .05), na.rm = TRUE)
 cuts[length(cuts)] <- 1
 predProb <- sapply(2:length(cuts), function(ii){
-    mean(allgames$homeWinProb[allgames$homeWinProb >= cuts[ii-1] & allgames$homeWinProb < cuts[ii]])
+    mean(allgames$homeWinProb[allgames$homeWinProb >= cuts[ii-1] & allgames$homeWinProb < cuts[ii]], na.rm = TRUE)
 })
 actualProb <- sapply(2:length(cuts), function(ii){
-    mean(homewin[allgames$homeWinProb >= cuts[ii-1] & allgames$homeWinProb < cuts[ii]])
+    mean(homewin[allgames$homeWinProb >= cuts[ii-1] & allgames$homeWinProb < cuts[ii]], na.rm=TRUE)
 })
 plot(predProb, actualProb, asp=1, xlim=0:1,ylim=0:1)
 abline(0,1)
@@ -87,22 +160,22 @@ ptsdiff <- (allgames$PTShome - allgames$PTSvis)[which(!allgames$playoffs)]
 hist(ptsdiff, breaks=50)
 abline(v=mean(ptsdiff))
 
-# home court advantage fell off ~2020 (2020 was bubble season)
-pdbs <- sapply(1997:2024, function(year){
+# home court advantage fell off ~2020 (2020 was bubble season), but it's back!
+pdbs <- sapply(1997:2025, function(year){
     ptsdiff <- (allgames$PTShome - allgames$PTSvis)[which(!allgames$playoffs & allgames$season == year)]
     return(mean(ptsdiff))
 })
-plot(1997:2024, pdbs, type='b')
+plot(1997:2025, pdbs, type='b')
 abline(h=0)
 
 
 
 # league average Elo
-activeTeams <- sapply(1997:2024, function(szn){
+activeTeams <- sapply(1997:2025, function(szn){
     curryear <- allgames[which(allgames$season == szn), ]
-    return(unique(c(curryear$away_team_abbr, curryear$home_team_abbr)))
+    return(unique(c(curryear$away_abbr, curryear$home_abbr)))
 })
-names(activeTeams) <- 1997:2024
+names(activeTeams) <- 1997:2025
 AvgElo <- sapply(1:nrow(allgames), function(ii){
     game <- allgames[ii,]
     elos <- sapply(activeTeams[[as.character(game$season)]], prevElo, date = game$Date, season = game$season)
