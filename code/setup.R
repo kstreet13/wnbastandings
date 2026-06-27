@@ -25,7 +25,7 @@ DET,Detroit Shock,#003DA5,#041E42,9
 HOU,Houston Comets,#BA0C2F,#041E42,3
 MIA,Miami Sol,#A6192E,#010101,14
 ORL,Orlando Miracle,#0057B7,#010101,12
-POR,Portland Fire,#C8102E,#010101,15
+PDX,Portland Fire,#C8102E,#010101,15
 SAC,Sacramento Monarchs,#753BBD,#010101,7
 SAS,San Antonio Silver Stars,#010101,#8D9093,8
 TUL,Tulsa Shock,#FFB81C,#010101,9
