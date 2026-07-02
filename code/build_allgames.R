@@ -33,7 +33,8 @@ CC <- as.data.frame(matrix(c(
     'Tue, Jul 26, 2022','Las Vegas Aces','93','Chicago Sky','83','','2022',
     'Tue, Aug 15, 2023','New York Liberty','82','Las Vegas Aces','63','','2023',
     'Tue, Jun 25, 2024','Minnesota Lynx','94','New York Liberty','89','','2024',
-    'Tue, Jul 1, 2025','Indiana Fever','74','Minnesota Lynx','59','','2025'
+    'Tue, Jul 1, 2025','Indiana Fever','74','Minnesota Lynx','59','','2025',
+    'Tue, Jun 30, 2026','Las Vegas Aces','85','New York Liberty','93','','2026'
 ), ncol = 7, byrow = TRUE))
 CC$playoffs <- TRUE
 names(CC) <- names(allgames)
@@ -90,8 +91,8 @@ for(season in 1997:2025){
         game <- allgames[idx,]
         
         # search for previous Elo ratings
-        game$away_elo_pre <- prevElo(game$away_franchise, game$Date, game$season)
-        game$home_elo_pre <- prevElo(game$home_franchise, game$Date, game$season)
+        game$away_elo_pre <- prevElo(game$away_franchise, game$Date, game$season, allgames)
+        game$home_elo_pre <- prevElo(game$home_franchise, game$Date, game$season, allgames)
         
         # calculate win prob
         game$homeWinProb <- homeWinProb(game)
