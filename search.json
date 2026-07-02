@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "2026 WNBA Standings",
     "section": "",
-    "text": "StaticInteractive\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAbout these plots\nStandings plots show how many games above or below .500 each team was throughout the course of the season. Ties are broken arbitrarily, as I didn’t actually code up the tie-breaker scenarios.\nElo ratings are a way of estimating a team’s “true” skill level, invented by Arpad Elo to rank chess players (Wikipedia). The rating system used here was adapted from the WNBA ratings system implemented by fivethirtyeight.com. Ratings are partially carried over from year to year, which is why the lines have different starting values. The long-run average rating is 1500.\n\n\nUpcoming Games\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nRecent Games\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nElo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 65.97%\nRecord: 95-49\nBiggest upset:",
+    "text": "StaticInteractive\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAbout these plots\nStandings plots show how many games above or below .500 each team was throughout the course of the season. Ties are broken arbitrarily, as I didn’t actually code up the tie-breaker scenarios.\nElo ratings are a way of estimating a team’s “true” skill level, invented by Arpad Elo to rank chess players (Wikipedia). The rating system used here was adapted from the WNBA ratings system implemented by fivethirtyeight.com. Ratings are partially carried over from year to year, which is why the lines have different starting values. The long-run average rating is 1500.\n\n\nUpcoming Games\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nRecent Games\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nElo Model Performance\nFor each game, the model estimates the probabilities of each team winning, based on their relative ratings. These probabilities add up to 100% and we say that the model “picks” whichever team has better than a 50% chance of winning.\nPercent correct: 66.21%\nRecord: 96-49\nBiggest upset:",
     "crumbs": [
       "Current Year"
     ]
@@ -69,7 +69,7 @@
     "href": "pages/Utah Starzz.html",
     "title": "Utah Starzz",
     "section": "",
-    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - Present)",
+    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - 2026)",
     "crumbs": [
       "Team Histories",
       "Past Teams",
@@ -115,7 +115,7 @@
     "href": "pages/Las Vegas Aces.html",
     "title": "Las Vegas Aces",
     "section": "",
-    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2022\n2023\n2025",
+    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - 2026)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2022\n2023\n2025",
     "crumbs": [
       "Team Histories",
       "Las Vegas Aces"
@@ -170,7 +170,7 @@
     "href": "pages/San Antonio Silver Stars.html",
     "title": "San Antonio Silver Stars",
     "section": "",
-    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - Present)",
+    "text": "Franchise History\n\nUtah Starzz (1997 - 2002)\nSan Antonio Silver Stars (2003 - 2017)\nLas Vegas Aces (2018 - 2026)",
     "crumbs": [
       "Team Histories",
       "Past Teams",
@@ -204,7 +204,7 @@
     "href": "pages/New York Liberty.html",
     "title": "New York Liberty",
     "section": "",
-    "text": "Franchise History\n\nNew York Liberty (1997 - Present)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2024",
+    "text": "Franchise History\n\nNew York Liberty (1997 - 2026)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChampionships\n\n2024\n2026",
     "crumbs": [
       "Team Histories",
       "New York Liberty"
